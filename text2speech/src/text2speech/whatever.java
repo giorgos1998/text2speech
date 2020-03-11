@@ -16,6 +16,7 @@ public class whatever {
     }
 
     public static void main(String[] agrs){
+    	System.out.println("Hello!");
         String[] text = new String[]{"hello world","hello world 2"};
         int i;
         for(i=0;i<text.length;i++){
