@@ -1,6 +1,7 @@
 package gui;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.EventQueue;
 import java.awt.SystemColor;
 import java.awt.event.ActionEvent;
@@ -70,6 +71,48 @@ public class FreeTTSWindow extends JFrame{
 			}
 		});
 		mnNewMenu.add(mntmNewMenuItem_4);
+		
+		// SPEECH MENU -------------------------------------------------------------------------
+		
+		JMenu mnNewMenu_1 = new JMenu("Speech");
+		menuBar.add(mnNewMenu_1);
+		
+		JMenuItem mntmNewMenuItem_5 = new JMenuItem("Play All");
+		mnNewMenu_1.add(mntmNewMenuItem_5);
+		
+		JMenuItem mntmNewMenuItem_6 = new JMenuItem("Play Selected");
+		mnNewMenu_1.add(mntmNewMenuItem_6);
+		
+		JMenuItem mntmNewMenuItem_7 = new JMenuItem("Play All in Reverse");
+		mnNewMenu_1.add(mntmNewMenuItem_7);
+		
+		JMenuItem mntmNewMenuItem_8 = new JMenuItem("Play Selected in Reverse");
+		mnNewMenu_1.add(mntmNewMenuItem_8);
+		
+		JMenuItem mntmNewMenuItem_9 = new JMenuItem("Play All Encoded");
+		mnNewMenu_1.add(mntmNewMenuItem_9);
+		
+		JMenuItem mntmNewMenuItem_10 = new JMenuItem("Play Selected Encoded");
+		mnNewMenu_1.add(mntmNewMenuItem_10);
+		
+		mnNewMenu_1.addSeparator();
+		
+		JMenuItem mntmNewMenuItem_11 = new JMenuItem("Preferences");
+		mnNewMenu_1.add(mntmNewMenuItem_11);
+		
+		// ACTION READER MENU -------------------------------------------------------------------
+		JMenu mnNewMenu_2 = new JMenu("Action Recorder");
+		menuBar.add(mnNewMenu_2);
+		
+		JMenuItem mntmNewMenuItem_12 = new JMenuItem("Start Recording");
+		mnNewMenu_2.add(mntmNewMenuItem_12);
+		
+		JMenuItem mntmNewMenuItem_13 = new JMenuItem("Stop Recording");
+		mnNewMenu_2.add(mntmNewMenuItem_13);
+		
+		JMenuItem mntmNewMenuItem_14 = new JMenuItem("Play Recorded");
+		//mntmNewMenuItem_14.setForeground(Color.BLACK);
+		mnNewMenu_2.add(mntmNewMenuItem_14);
 		
 		createListeners();	
 	}
