@@ -1,12 +1,7 @@
 package gui;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.EventQueue;
 import java.awt.SystemColor;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-
 import javax.swing.*;
 import javax.swing.border.LineBorder;
 import javax.swing.filechooser.FileFilter;
@@ -19,12 +14,19 @@ public class FreeTTSWindow extends JFrame{
 	
 	private JTextArea textArea = new JTextArea(10, 10);
 	private JFileChooser fileChooser = new JFileChooser();
-	private JMenuItem mntmNewMenuItem;		// New File
-	private JMenuItem mntmNewMenuItem_1;	// Open file...
-	private JMenuItem mntmNewMenuItem_2;	// Save file
-	private JMenuItem mntmNewMenuItem_3;	// Save As file...
-	private JMenuItem mntmNewMenuItem_4;	// Exit
-		
+	private JMenuItem newMenuItem;			// New File
+	private JMenuItem openMenuItem;			// Open file...
+	private JMenuItem saveMenuItem;			// Save file
+	private JMenuItem saveAsMenuItem;		// Save As file...
+	private JMenuItem exitMenuItem;			// Exit
+	// ADD MORE...
+	private JMenuItem preferencesMenuItem;	// Preferences
+	private JMenuItem guidelines;			//Guidelines
+	private int volumeValue = 50;
+	private int speedValue = 50;
+	private int pitchValue = 50;
+	
+	
 	public FreeTTSWindow() {
 		
 		JScrollPane scrollPane = new JScrollPane(textArea, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
@@ -45,76 +47,95 @@ public class FreeTTSWindow extends JFrame{
 		setJMenuBar(menuBar);
 		
 		/*
-		 * FILE MENU
+		 *  FILE MENU
 		 */
-		JMenu mnNewMenu = new JMenu("File");
-		menuBar.add(mnNewMenu);
+		JMenu fileMenu = new JMenu("File");
+		menuBar.add(fileMenu);
 		
-		mntmNewMenuItem = new JMenuItem("New file");
-		mnNewMenu.add(mntmNewMenuItem);
+		newMenuItem = new JMenuItem("New file");
+		fileMenu.add(newMenuItem);
 		
-		mntmNewMenuItem_1 = new JMenuItem("Open file...");
-		mnNewMenu.add(mntmNewMenuItem_1);
+		openMenuItem = new JMenuItem("Open file...");
+		fileMenu.add(openMenuItem);
 		
-		mntmNewMenuItem_2 = new JMenuItem("Save");
-		mnNewMenu.add(mntmNewMenuItem_2);
+		saveMenuItem = new JMenuItem("Save");
+		fileMenu.add(saveMenuItem);
 		
-		mntmNewMenuItem_3 = new JMenuItem("Save As...");
-		mnNewMenu.add(mntmNewMenuItem_3);
+		saveAsMenuItem = new JMenuItem("Save As...");
+		fileMenu.add(saveAsMenuItem);
 		
-		mnNewMenu.addSeparator();
+		fileMenu.addSeparator();
 		
-		mntmNewMenuItem_4 = new JMenuItem("Exit");
-		mntmNewMenuItem_4.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent ev) {
-				System.exit(0);
-			}
-		});
-		mnNewMenu.add(mntmNewMenuItem_4);
+		exitMenuItem = new JMenuItem("Exit");
+		fileMenu.add(exitMenuItem);
 		
-		// SPEECH MENU -------------------------------------------------------------------------
+		/*
+		 *  SPEECH MENU 
+		 */
+		JMenu speechMenu = new JMenu("Speech");
+		menuBar.add(speechMenu);
 		
-		JMenu mnNewMenu_1 = new JMenu("Speech");
-		menuBar.add(mnNewMenu_1);
+		JMenuItem playAllMenuItem = new JMenuItem("Play All");
+		speechMenu.add(playAllMenuItem);
 		
-		JMenuItem mntmNewMenuItem_5 = new JMenuItem("Play All");
-		mnNewMenu_1.add(mntmNewMenuItem_5);
+		JMenuItem playSelectedMenuItem = new JMenuItem("Play Selected");
+		speechMenu.add(playSelectedMenuItem);
 		
-		JMenuItem mntmNewMenuItem_6 = new JMenuItem("Play Selected");
-		mnNewMenu_1.add(mntmNewMenuItem_6);
+		JMenuItem playAllRevMenuItem = new JMenuItem("Play All in Reverse");
+		speechMenu.add(playAllRevMenuItem);
 		
-		JMenuItem mntmNewMenuItem_7 = new JMenuItem("Play All in Reverse");
-		mnNewMenu_1.add(mntmNewMenuItem_7);
+		JMenuItem playSelRevMenuItem = new JMenuItem("Play Selected in Reverse");
+		speechMenu.add(playSelRevMenuItem);
 		
-		JMenuItem mntmNewMenuItem_8 = new JMenuItem("Play Selected in Reverse");
-		mnNewMenu_1.add(mntmNewMenuItem_8);
+		JMenuItem playAllEncMenuItem = new JMenuItem("Play All Encoded");
+		speechMenu.add(playAllEncMenuItem);
 		
-		JMenuItem mntmNewMenuItem_9 = new JMenuItem("Play All Encoded");
-		mnNewMenu_1.add(mntmNewMenuItem_9);
+		JMenuItem playSelEncMenuItem = new JMenuItem("Play Selected Encoded");
+		speechMenu.add(playSelEncMenuItem);
 		
-		JMenuItem mntmNewMenuItem_10 = new JMenuItem("Play Selected Encoded");
-		mnNewMenu_1.add(mntmNewMenuItem_10);
+		speechMenu.addSeparator();
 		
-		mnNewMenu_1.addSeparator();
+		preferencesMenuItem = new JMenuItem("Preferences");
+		speechMenu.add(preferencesMenuItem);
 		
-		JMenuItem mntmNewMenuItem_11 = new JMenuItem("Preferences");
-		mnNewMenu_1.add(mntmNewMenuItem_11);
+		/* 
+		 *  ACTION READER MENU 
+		 */
+		JMenu actionReaderMenu = new JMenu("Action Recorder");
+		menuBar.add(actionReaderMenu);
 		
-		// ACTION READER MENU -------------------------------------------------------------------
-		JMenu mnNewMenu_2 = new JMenu("Action Recorder");
-		menuBar.add(mnNewMenu_2);
+		JMenuItem startRecMenuItem = new JMenuItem("Start Recording");
+		actionReaderMenu.add(startRecMenuItem);
 		
-		JMenuItem mntmNewMenuItem_12 = new JMenuItem("Start Recording");
-		mnNewMenu_2.add(mntmNewMenuItem_12);
+		JMenuItem stopRecMenuItem = new JMenuItem("Stop Recording");
+		actionReaderMenu.add(stopRecMenuItem);
 		
-		JMenuItem mntmNewMenuItem_13 = new JMenuItem("Stop Recording");
-		mnNewMenu_2.add(mntmNewMenuItem_13);
+		JMenuItem playRecMenuItem = new JMenuItem("Play Recorded");
+		actionReaderMenu.add(playRecMenuItem);
 		
-		JMenuItem mntmNewMenuItem_14 = new JMenuItem("Play Recorded");
-		//mntmNewMenuItem_14.setForeground(Color.BLACK);
-		mnNewMenu_2.add(mntmNewMenuItem_14);
+		/* 
+		 *  HELP MENU 
+		 */
+		JMenu helpMenu = new JMenu("Help");
+		menuBar.add(helpMenu);
+		
+		guidelines = new JMenuItem("Guidelines");
+		helpMenu.add(guidelines);
+		// TO DO
 		
 		createListeners();	
+	}
+		
+	public void createListeners() {
+		CommandFactory factory = new CommandFactory();
+		newMenuItem.addActionListener(factory.makeCommand("NewFileCommand", this));
+		openMenuItem.addActionListener(factory.makeCommand("OpenFileCommand", this));
+		saveMenuItem.addActionListener(factory.makeCommand("SaveFileCommand", this));
+		saveAsMenuItem.addActionListener(factory.makeCommand("SaveAsFileCommand", this));
+		exitMenuItem.addActionListener(factory.makeCommand("ExitFileCommand", this));
+		// ADD MORE LISTENERS...
+		preferencesMenuItem.addActionListener(factory.makeCommand("TuneAudioCommand", this));
+		guidelines.addActionListener(factory.makeCommand("HelpCommand", this));
 	}
 	
 	public JTextArea getTextArea() {
@@ -128,26 +149,29 @@ public class FreeTTSWindow extends JFrame{
 	public void setFileChooser(JFileChooser fc) {
 		fileChooser = fc;
 	}
-		
-	public void createListeners() {
-		CommandFactory factory = new CommandFactory();
-		mntmNewMenuItem.addActionListener(factory.makeCommand("NewFileCommand", this));
-		mntmNewMenuItem_1.addActionListener(factory.makeCommand("OpenFileCommand", this));
-		mntmNewMenuItem_2.addActionListener(factory.makeCommand("SaveFileCommand", this));
-		mntmNewMenuItem_3.addActionListener(factory.makeCommand("SaveAsFileCommand", this));
-		mntmNewMenuItem_4.addActionListener(factory.makeCommand("ExitFileCommand", this));
+	
+	public void setVolumeValue(int vol) {
+		volumeValue = vol;
 	}
 	
-	public static void main(String args[]) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					FreeTTSWindow frame = new FreeTTSWindow();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
+	public int getVolumeValue() {
+		return volumeValue;
 	}
+	
+	public void setSpeedValue(int spd) {
+		speedValue = spd;
+	}
+	
+	public int getSpeedValue() {
+		return speedValue;
+	}
+	
+	public void setPitchValue(int pit) {
+		pitchValue = pit;
+	}
+	
+	public int getPitchValue() {
+		return pitchValue;
+	}
+	
 }
