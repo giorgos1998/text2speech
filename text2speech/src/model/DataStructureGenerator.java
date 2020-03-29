@@ -1,10 +1,6 @@
 package model;
 
 public class DataStructureGenerator {
-
-	public DataStructureGenerator() {
-		
-	}
 	
 	public String[] breakLines(String input){
 		return input.split("\\r?\\n");
