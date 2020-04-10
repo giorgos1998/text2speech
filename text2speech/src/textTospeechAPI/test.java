@@ -1,10 +1,9 @@
-package text2speech;
+package textTospeechAPI;
 
 import com.sun.speech.freetts.Voice;
 import com.sun.speech.freetts.VoiceManager;
 
 public class test {
-	VoiceManager freettsVM;
     private static Voice voice;
 
     private static void speak(String msg){
