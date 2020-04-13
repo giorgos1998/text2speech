@@ -1,23 +1,30 @@
 package textTospeechAPI;
 
 public class FakeTTSadapter implements TextToSpeechApi {
-
+	
+	@Override
 	public void play(String textToPlay) {
 		System.out.println("This is a fake text to speech, it can only convert text to text.");
-		System.out.println("It's even more useless because this does not get printed in the UI.");
-		System.out.println("Anyway here's your text:");
+		System.out.println("Here's your text:");
 		System.out.println(textToPlay);
 	}
-	public void setVolume(int volume) {
+	@Override
+	public void setVolume(float volume) {
 		System.out.println("This is a fake text to speech, it can not produce sound.");
 		System.out.println("Volume is a property of sound, you tried to change it to: "+ volume);
 	}
-	public void setPich(double pitch) {
+	@Override
+	public void setPich(float pitch) {
 		System.out.println("This is a fake text to speech, it can not produce sound.");
 		System.out.println("Pitch is a property of sound, you tried to change it to: "+ pitch);
 	}
-	public void setSpeed(double speed) {
+	@Override
+	public void setRate(float rate) {
 		System.out.println("This is a fake text to speech, it can not produce sound.");
-		System.out.println("Speed is a property of sound, you tried to change it to: "+ speed);
+		System.out.println("Rate controls words per minute, you tried to change it to: "+ rate);
+	}
+	@Override
+	public void deallocate() {
+		System.out.println("Fake tts was deallocated");
 	}
 }

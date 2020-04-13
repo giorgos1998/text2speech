@@ -9,21 +9,29 @@ public class FTTSadapter implements TextToSpeechApi {
 	
 	public FTTSadapter() {
 		System.setProperty("freetts.voices", "com.sun.speech.freetts.en.us.cmu_us_kal.KevinVoiceDirectory");
-	}
-	
-	public void play(String textToPlay) {
 		voice = VoiceManager.getInstance().getVoices()[0];
-        voice.allocate();
+		voice.allocate();
+		System.out.println(voice.getRate());
+		
+	}
+	@Override
+	public void play(String textToPlay) {
         voice.speak(textToPlay);
-        voice.deallocate();
 	}
-	public void setVolume(int volume) {
-		//to do
+	@Override
+	public void setVolume(float volume) { 	//0.4-1 step .005
+		voice.setVolume(volume);
 	}
-	public void setPich(double pitch) {
-		//to do
+	@Override
+	public void setPich(float pitch) {  	//1-500 step 1
+		voice.setPitch(pitch);
 	}
-	public void setSpeed(double speed) {
-		//to do
+	@Override
+	public void setRate(float rate) {   	//50-999 step 1
+		voice.setRate(rate);
+	}
+	@Override
+	public void deallocate() {
+		voice.deallocate();
 	}
 }

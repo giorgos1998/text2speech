@@ -2,7 +2,8 @@ package textTospeechAPI;
 
 public interface TextToSpeechApi {
 	public void play(String textToPlay);
-	public void setVolume(int volume);
-	public void setPich(double pitch);
-	public void setSpeed(double speed);
+	public void setVolume(float volume);
+	public void setPich(float pitch);
+	public void setRate(float rate);
+	public void deallocate();
 }
