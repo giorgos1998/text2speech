@@ -1,4 +1,4 @@
-package textTospeechAPI;
+package model.textToSpeechAPI;
 
 /**
  * <h1> TTS Api Factory </h1> 
@@ -10,10 +10,10 @@ public class TextToSpeechApiFactory {
 	/**
 	 * Creates Api Adapters for any implemented TTS service
 	 * currently implemented: FreeTTS, FakeTTS
-	 * @param serviceName Name of the service needed, case ignored
+	 * @param apiType Name of the api needed, case ignored
 	 */
-	public TextToSpeechApi createSpeechApi(String serviceName) {
-		switch(serviceName.toUpperCase()) {
+	public TextToSpeechApi createSpeechApi(String apiType) {
+		switch(apiType.toUpperCase()) {
 			case("FREETTS"):
 				return new FTTSadapter();
 			case("FAKETTS"):

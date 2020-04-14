@@ -2,8 +2,8 @@ package model;
 
 import java.util.ArrayList;
 
-import textTospeechAPI.TextToSpeechApi;
-import textTospeechAPI.TextToSpeechApiFactory;
+import model.textToSpeechAPI.TextToSpeechApi;
+import model.textToSpeechAPI.TextToSpeechApiFactory;
 
 public class Document {
 	

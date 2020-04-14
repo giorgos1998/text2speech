@@ -1,4 +1,4 @@
-package textTospeechAPI;
+package model.textToSpeechAPI;
 
 import com.sun.speech.freetts.Voice;
 import com.sun.speech.freetts.VoiceManager;

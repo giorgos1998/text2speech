@@ -1,4 +1,4 @@
-package textTospeechAPI;
+package model.textToSpeechAPI;
 
 /**
  * <h1> Interface for every Api Adapter </h1> 

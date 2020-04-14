@@ -1,4 +1,4 @@
-package textTospeechAPI;
+package model.textToSpeechAPI;
 
 /**
  * <h1> FakeTTS Api Adapter </h1>
