@@ -2,6 +2,9 @@ package gui;
 
 import java.awt.BorderLayout;
 import java.awt.SystemColor;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
 import javax.swing.*;
 import javax.swing.border.LineBorder;
 import javax.swing.filechooser.FileFilter;
@@ -123,7 +126,19 @@ public class FreeTTSWindow extends JFrame{
 		helpMenu.add(guidelines);
 		// TO DO
 		
-		createListeners();	
+		createListeners();
+		
+		/*
+		 * 	LINE TESTING STUFF
+		 */
+		JButton countLines = new JButton("Count lines");
+		countLines.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent ev) {
+				int lines = textArea.getLineCount();
+				textArea.append("\n\nNo. of lines: " + lines);
+			}
+		});
+		menuBar.add(countLines);
 	}
 		
 	public void createListeners() {
