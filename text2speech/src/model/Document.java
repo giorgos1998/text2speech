@@ -13,6 +13,7 @@ public class Document {
 	private TextToSpeechApiFactory speechFactory;
 	//encoding
 	//encoding factory
+	//maybe more
 	
 	public Document() {
 		speechFactory = new TextToSpeechApiFactory();
