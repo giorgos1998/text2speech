@@ -5,10 +5,8 @@ package model.encoding;
  * @author John Rizos
  */
 
-public class AtBash extends EncTemplate {
-
-	public String encode(String textToEncode) {
-		return null;
+public class AtBash extends LetterEncTemplate {
+	public AtBash() {
+		translateMap = "zyxwvutsrqponmlkjihgfedcba";
 	}
-	
 }
