@@ -1,5 +1,14 @@
 package textTospeechAPI;
 
+/**
+ * <h1> FakeTTS Api Adapter </h1>
+ * 
+ * A fake TTS adapter, does not actually do anything more than
+ * print the parameters given per method to System.out
+ * 
+ * @author John Rizos
+ */
+
 public class FakeTTSadapter implements TextToSpeechApi {
 	
 	@Override
@@ -25,6 +34,6 @@ public class FakeTTSadapter implements TextToSpeechApi {
 	}
 	@Override
 	public void deallocate() {
-		System.out.println("Fake tts was deallocated");
+		System.out.println("Fake tts was deallocated.");
 	}
 }
