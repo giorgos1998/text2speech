@@ -54,6 +54,8 @@ public class TuneAudio implements ActionListener{
 				frame.setSpeedValue(speedSlider.getValue());
 				frame.setPitchValue(pitchSlider.getValue());
 				preferencesFrame.dispose();
+				
+				//TODO Add model.Document.saveSettings()
 			}
 		});
 		
