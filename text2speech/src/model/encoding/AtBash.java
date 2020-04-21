@@ -6,6 +6,10 @@ package model.encoding;
  */
 
 public class AtBash extends LetterEncTemplate {
+	/**
+	 * I only have to set the translateMap so any letter
+	 * will be translated to the correct letter
+	 */
 	public AtBash() {
 		translateMap = "zyxwvutsrqponmlkjihgfedcba";
 	}

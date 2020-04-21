@@ -4,7 +4,7 @@ package model.encoding;
  * <h1>  Letter Encoding Template </h1> 
  * Template for encoding letters in a string with a 1-1 function.
  * Ignores characters other than letters.
- * Any extension of this Template simply requires to set the tanslation map String.
+ * Any extension of this Template simply requires to set the translation map String.
  * For other characters, different kinds of translation (ex not 1-1) we need a 
  * different template, or a normal implementation of Encoding Strategy.
  * @author John Rizos
@@ -17,10 +17,11 @@ public abstract class LetterEncTemplate implements EncStrategy {
 	 * that gets encoded by this template once in a logical order.
 	 * That order for translateMap is for each index i the character that map[i] gets 
 	 * translated to: map[i] -> translateMap[i] 
+	 * They are both Strings (essentially char[]) because its easier to initialize them that way.
 	 */
 	
-	public String translateMap; 
-	public String map = "abcdefghijklmnopqrstuvwxyz";
+	protected String translateMap; 
+	private String map = "abcdefghijklmnopqrstuvwxyz";
 	
 	@Override
 	public String encode(String textToEncode) {
