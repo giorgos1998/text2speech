@@ -63,6 +63,14 @@ public class Document {
 		speechAPI.play(textToPlay);
 	}
 	
+	public void playAllReverse(String text) {
+		//TODO
+	}
+	
+	public void playSelectedReverse(String text) {
+		//TODO
+	}
+	
 	public void saveFile() {
 		//TODO
 	}
