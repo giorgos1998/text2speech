@@ -14,22 +14,22 @@ public interface TextToSpeechApi {
 	public void play(String textToPlay);
 	/**
 	 * Sets the volume of sound played
-	 * Out of range parameters are set automatically to default (1)
-	 * @param volume A float in range [0.4-1] anything under 0.4 is inaudible
+	 * Out of range parameters are set automatically to default
+	 * @param volume int inbetween [1-100]
 	 */
-	public void setVolume(float volume);
+	public void setVolume(int volume);
 	/**
 	 * Sets the pitch of sound played
-	 * Out of range parameters are set automatically to default (100)
-	 * @param volume A float in range [1-500] Hz
+	 * Out of range parameters are set automatically to default
+	 * @param pitch int inbetween [1-100]
 	 */
-	public void setPich(float pitch);
+	public void setPich(int pitch);
 	/**
 	 * Sets the rate of sound played
-	 * Out of range parameters are set automatically to default (150)
-	 * @param volume A float in range [50-999] wpm anything under 50 is incoherent
+	 * Out of range parameters are set automatically to default
+	 * @param rate int inbetween [1-100]
 	 */
-	public void setRate(float rate);
+	public void setRate(int rate);
 	/**
 	 * To be called when the API is switched to another service or at end of program to
 	 * close the API currently used.

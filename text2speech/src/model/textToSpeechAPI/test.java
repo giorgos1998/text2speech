@@ -14,7 +14,7 @@ public class test {
         
         TextToSpeechApi api = fac.createSpeechApi("freetts");
         
-        api.setVolume(0.9f);
+        api.setVolume(80);
         System.out.println(text[1]);
         api.play(text[1]);
 

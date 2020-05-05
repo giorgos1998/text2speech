@@ -18,17 +18,17 @@ public class FakeTTSadapter implements TextToSpeechApi {
 		System.out.println(textToPlay);
 	}
 	@Override
-	public void setVolume(float volume) {
+	public void setVolume(int volume) {
 		System.out.println("This is a fake text to speech, it can not produce sound.");
 		System.out.println("Volume is a property of sound, you tried to change it to: "+ volume);
 	}
 	@Override
-	public void setPich(float pitch) {
+	public void setPich(int pitch) {
 		System.out.println("This is a fake text to speech, it can not produce sound.");
 		System.out.println("Pitch is a property of sound, you tried to change it to: "+ pitch);
 	}
 	@Override
-	public void setRate(float rate) {
+	public void setRate(int rate) {
 		System.out.println("This is a fake text to speech, it can not produce sound.");
 		System.out.println("Rate controls words per minute, you tried to change it to: "+ rate);
 	}
