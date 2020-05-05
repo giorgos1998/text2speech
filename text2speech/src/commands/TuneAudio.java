@@ -15,13 +15,16 @@ import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.border.LineBorder;
 
 import gui.FreeTTSWindow;
+import model.Document;
 
 public class TuneAudio implements ActionListener{
 	
 	private FreeTTSWindow frame;
+	private Document doc;
 	
-	public TuneAudio(FreeTTSWindow frame) {
+	public TuneAudio(FreeTTSWindow frame, Document doc) {
 		this.frame = frame;
+		this.doc = doc;
 	}
 		
 	@Override
@@ -37,25 +40,40 @@ public class TuneAudio implements ActionListener{
 		JLabel pitchLabel = new JLabel("Pitch");
 		JLabel encodingStrategyLabel = new JLabel("Encoding Strategy");
 		
-		JSlider volumeSlider = new JSlider();
+		JSlider volumeSlider = new JSlider();		
 		volumeSlider.setValue(frame.getVolumeValue());
-		volumeSlider.setBorder(new LineBorder(SystemColor.activeCaption));		
+		volumeSlider.setBorder(new LineBorder(SystemColor.activeCaption));	
+		
 		JSlider speedSlider = new JSlider();
 		speedSlider.setValue(frame.getSpeedValue());
 		speedSlider.setBorder(new LineBorder(SystemColor.activeCaption));		
+		
 		JSlider pitchSlider = new JSlider();
 		pitchSlider.setValue(frame.getPitchValue());
 		pitchSlider.setBorder(new LineBorder(SystemColor.activeCaption));			
 		
+		JComboBox<String> comboBox = new JComboBox<String>();
+		comboBox.addItem("None");
+		comboBox.addItem("Atbash");
+		comboBox.addItem("Rot-13");
+		comboBox.setSelectedItem(frame.getEncodingStrategy());
+		
 		JButton applyButton = new JButton("Apply");
 		applyButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent ev) {
-				frame.setVolumeValue(volumeSlider.getValue());
-				frame.setSpeedValue(speedSlider.getValue());
-				frame.setPitchValue(pitchSlider.getValue());
+				int volumeValue = volumeSlider.getValue();
+				int speedValue = speedSlider.getValue();
+				int pitchValue = pitchSlider.getValue();
+				String encodingStrategy = String.valueOf(comboBox.getSelectedItem());
+				
+				frame.setVolumeValue(volumeValue);
+				frame.setSpeedValue(speedValue);
+				frame.setPitchValue(pitchValue);
+				frame.setEncodingStrategy(encodingStrategy);
 				preferencesFrame.dispose();
 				
 				//TODO Add model.Document.saveSettings()
+				doc.saveSettings(volumeValue, speedValue, pitchValue, encodingStrategy);
 			}
 		});
 		
@@ -65,14 +83,7 @@ public class TuneAudio implements ActionListener{
 				preferencesFrame.dispose();
 			}
 		});
-		
-		JComboBox comboBox = new JComboBox();
-		comboBox.addItem("None");
-		comboBox.addItem("Atbash");
-		comboBox.addItem("Rot-13");
-		
-		//...
-		
+				
 		GroupLayout groupLayout = new GroupLayout(preferencesFrame.getContentPane());
 		groupLayout.setHorizontalGroup(
 			groupLayout.createParallelGroup(Alignment.LEADING).addGroup(groupLayout.createSequentialGroup()

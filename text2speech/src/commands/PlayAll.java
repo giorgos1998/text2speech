@@ -1,9 +1,11 @@
 package commands;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import gui.FreeTTSWindow;
 import model.Document;
+
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
 
 public class PlayAll implements ActionListener{
 

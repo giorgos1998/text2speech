@@ -17,17 +17,24 @@ public class FreeTTSWindow extends JFrame{
 	
 	private JTextArea textArea = new JTextArea(10, 10);
 	private JFileChooser fileChooser = new JFileChooser();
-	private JMenuItem newMenuItem;			// New File
-	private JMenuItem openMenuItem;			// Open file...
-	private JMenuItem saveMenuItem;			// Save file
-	private JMenuItem saveAsMenuItem;		// Save As file...
-	private JMenuItem exitMenuItem;			// Exit
+	private JMenuItem newMenuItem;
+	private JMenuItem openMenuItem;
+	private JMenuItem saveMenuItem;
+	private JMenuItem saveAsMenuItem;
+	private JMenuItem exitMenuItem;
+	private JMenuItem playAllMenuItem;
+	private JMenuItem playSelectedMenuItem;
+	private JMenuItem playAllRevMenuItem;
+	private JMenuItem playSelRevMenuItem;
+	private JMenuItem playAllEncMenuItem;
+	private JMenuItem playSelEncMenuItem;
 	// ADD MORE...
-	private JMenuItem preferencesMenuItem;	// Preferences
-	private JMenuItem guidelines;			//Guidelines
+	private JMenuItem preferencesMenuItem;
+	private JMenuItem guidelines;
 	private int volumeValue = 50;
-	private int speedValue = 50;
-	private int pitchValue = 50;
+	private int speedValue = 21;
+	private int pitchValue = 11;
+	private String encodingStrategy = "";
 	
 	
 	public FreeTTSWindow() {
@@ -78,22 +85,22 @@ public class FreeTTSWindow extends JFrame{
 		JMenu speechMenu = new JMenu("Speech");
 		menuBar.add(speechMenu);
 		
-		JMenuItem playAllMenuItem = new JMenuItem("Play All");
+		playAllMenuItem = new JMenuItem("Play All");
 		speechMenu.add(playAllMenuItem);
 		
-		JMenuItem playSelectedMenuItem = new JMenuItem("Play Selected");
+		playSelectedMenuItem = new JMenuItem("Play Selected");
 		speechMenu.add(playSelectedMenuItem);
 		
-		JMenuItem playAllRevMenuItem = new JMenuItem("Play All in Reverse");
+		playAllRevMenuItem = new JMenuItem("Play All in Reverse");
 		speechMenu.add(playAllRevMenuItem);
 		
-		JMenuItem playSelRevMenuItem = new JMenuItem("Play Selected in Reverse");
+		playSelRevMenuItem = new JMenuItem("Play Selected in Reverse");
 		speechMenu.add(playSelRevMenuItem);
 		
-		JMenuItem playAllEncMenuItem = new JMenuItem("Play All Encoded");
+		playAllEncMenuItem = new JMenuItem("Play All Encoded");
 		speechMenu.add(playAllEncMenuItem);
 		
-		JMenuItem playSelEncMenuItem = new JMenuItem("Play Selected Encoded");
+		playSelEncMenuItem = new JMenuItem("Play Selected Encoded");
 		speechMenu.add(playSelEncMenuItem);
 		
 		speechMenu.addSeparator();
@@ -124,7 +131,7 @@ public class FreeTTSWindow extends JFrame{
 		
 		guidelines = new JMenuItem("Guidelines");
 		helpMenu.add(guidelines);
-		// TO DO
+		// TODO
 		
 		createListeners();
 		
@@ -147,7 +154,13 @@ public class FreeTTSWindow extends JFrame{
 		openMenuItem.addActionListener(factory.makeCommand("OpenFileCommand", this));
 		saveMenuItem.addActionListener(factory.makeCommand("SaveFileCommand", this));
 		saveAsMenuItem.addActionListener(factory.makeCommand("SaveAsFileCommand", this));
-		exitMenuItem.addActionListener(factory.makeCommand("ExitFileCommand", this));
+		exitMenuItem.addActionListener(factory.makeCommand("ExitCommand", this));
+		playAllMenuItem.addActionListener(factory.makeCommand("PlayAllCommand", this));
+		playSelectedMenuItem.addActionListener(factory.makeCommand("PlaySelectedCommand", this));
+		playAllRevMenuItem.addActionListener(factory.makeCommand("PlayAllReverse", this));
+		playSelRevMenuItem.addActionListener(factory.makeCommand("PlaySelectedReverse", this));
+		playAllEncMenuItem.addActionListener(factory.makeCommand("PlayAllEncoded", this));
+		playSelEncMenuItem.addActionListener(factory.makeCommand("PlaySelectedEncoded", this));
 		// ADD MORE LISTENERS...
 		preferencesMenuItem.addActionListener(factory.makeCommand("TuneAudioCommand", this));
 		guidelines.addActionListener(factory.makeCommand("HelpCommand", this));
@@ -187,6 +200,14 @@ public class FreeTTSWindow extends JFrame{
 	
 	public int getPitchValue() {
 		return pitchValue;
+	}
+		
+	public void setEncodingStrategy(String strat) {
+		encodingStrategy = strat;
+	}
+	
+	public String getEncodingStrategy() {
+		return encodingStrategy;
 	}
 	
 }

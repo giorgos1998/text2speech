@@ -17,7 +17,7 @@ public class PlaySelectedEncoded implements ActionListener{
 	
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		String text = frame.getTextArea().getText();
+		String text = frame.getTextArea().getSelectedText();
 		doc.playSelectedEncoded(text);
 	}
 }
