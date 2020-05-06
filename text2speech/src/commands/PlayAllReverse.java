@@ -5,6 +5,11 @@ import java.awt.event.ActionListener;
 import gui.FreeTTSWindow;
 import model.Document;
 
+/**
+ * <h1> Play All Reversed Command </h1> 
+ * @author Vasiliki Kanakari
+ */
+
 public class PlayAllReverse implements ActionListener{
 	
 	private FreeTTSWindow frame;

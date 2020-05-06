@@ -17,6 +17,19 @@ import javax.swing.border.LineBorder;
 import gui.FreeTTSWindow;
 import model.Document;
 
+/**
+ * <h1> Tune Audio Command </h1> 
+ * 
+ * Creates the "Preferences" window that contains
+ * the sliders that set the values of volume, speed, pitch 
+ * and encoding strategy of the speech.
+ * You can either press the "Apply" button to save any changes 
+ * made or press the "Cancel" button to discard them.
+ * 
+ * @author Vasiliki Kanakari
+ */
+
+
 public class TuneAudio implements ActionListener{
 	
 	private FreeTTSWindow frame;

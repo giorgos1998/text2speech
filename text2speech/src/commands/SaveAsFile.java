@@ -6,6 +6,10 @@ import model.Document;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+/**
+ * <h1> Save File As Command </h1> 
+ * @author Vasiliki Kanakari
+ */
 
 public class SaveAsFile implements ActionListener{
 	

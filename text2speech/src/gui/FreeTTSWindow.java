@@ -12,6 +12,15 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 
 import commands.CommandFactory;
 
+/**
+ * <h1> FreeTTS Main Window </h1>
+ * 
+ * The main application window
+ * Creates the menus and the menu items and then creates
+ * the action listeners for each one of them
+ *  
+ * @author Vasiliki Kanakari
+ */
 
 public class FreeTTSWindow extends JFrame{
 	
@@ -36,7 +45,11 @@ public class FreeTTSWindow extends JFrame{
 	private int pitchValue = 11;
 	private String encodingStrategy = "";
 	
-	
+	/**
+	 * Creates the main frame and sets its title,
+	 * the menus and their menu items,
+	 * a scroll bar and a text area
+	 */
 	public FreeTTSWindow() {
 		
 		JScrollPane scrollPane = new JScrollPane(textArea, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
@@ -131,7 +144,6 @@ public class FreeTTSWindow extends JFrame{
 		
 		guidelines = new JMenuItem("Guidelines");
 		helpMenu.add(guidelines);
-		// TODO
 		
 		createListeners();
 		
@@ -147,7 +159,10 @@ public class FreeTTSWindow extends JFrame{
 		});
 		menuBar.add(countLines);
 	}
-		
+	
+	/** 
+	 * Creates an action listener for each and every menu item
+	 */		
 	public void createListeners() {
 		CommandFactory factory = new CommandFactory();
 		newMenuItem.addActionListener(factory.makeCommand("NewFileCommand", this));
@@ -161,51 +176,89 @@ public class FreeTTSWindow extends JFrame{
 		playSelRevMenuItem.addActionListener(factory.makeCommand("PlaySelectedReverse", this));
 		playAllEncMenuItem.addActionListener(factory.makeCommand("PlayAllEncoded", this));
 		playSelEncMenuItem.addActionListener(factory.makeCommand("PlaySelectedEncoded", this));
-		// ADD MORE LISTENERS...
+		//TODO ADD MORE LISTENERS...
 		preferencesMenuItem.addActionListener(factory.makeCommand("TuneAudioCommand", this));
 		guidelines.addActionListener(factory.makeCommand("HelpCommand", this));
 	}
 	
+	/**
+	 * @return JTextArea The text area of the application.
+	 */
 	public JTextArea getTextArea() {
 		return textArea;
 	}
 	
+	/**
+	 * @return JFileChooser The file Chooser.
+	 */
 	public JFileChooser getFileChooser() {
 		return fileChooser;
 	}
 	
+	/**
+	 * Sets the file chooser value.
+	 * @param fc The value to be set to file chooser.
+	 */
 	public void setFileChooser(JFileChooser fc) {
 		fileChooser = fc;
 	}
 	
+	/**
+	 * Sets the volume value of the speech.
+	 * @param vol The value to be set to volume.
+	 */
 	public void setVolumeValue(int vol) {
 		volumeValue = vol;
 	}
 	
+	/**
+	 * @return int The current volume value the application uses.
+	 */
 	public int getVolumeValue() {
 		return volumeValue;
 	}
 	
+	/**
+	 * Sets the speed value of the speech.
+	 * @param spd The value to be set to speed.
+	 */
 	public void setSpeedValue(int spd) {
 		speedValue = spd;
 	}
 	
+	/**
+	 * @return int The current speed value the application uses.
+	 */
 	public int getSpeedValue() {
 		return speedValue;
 	}
 	
+	/**
+	 * Sets the pitch value of the speech.
+	 * @param pit The value to be set to pitch.
+	 */
 	public void setPitchValue(int pit) {
 		pitchValue = pit;
 	}
 	
+	/**
+	 * @return int The current pitch value the application uses.
+	 */
 	public int getPitchValue() {
 		return pitchValue;
 	}
 		
+	/**
+	 * Sets the encoding strategy of the speech.
+	 * @param strat The value to be set to encoding strategy.
+	 */
 	public void setEncodingStrategy(String strat) {
 		encodingStrategy = strat;
 	}
 	
+	/**
+	 * @return String The current encoding strategy the application uses.
+	 */
 	public String getEncodingStrategy() {
 		return encodingStrategy;
 	}

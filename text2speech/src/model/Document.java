@@ -25,6 +25,12 @@ import model.encoding.EncStrategyFactory;
 import model.textToSpeechAPI.TextToSpeechApi;
 import model.textToSpeechAPI.TextToSpeechApiFactory;
 
+/**
+ * <h1> Document  </h1> 
+ * @author Vasiliki Kanakari
+ */
+
+
 public class Document {
 	
 	private ArrayList<Line> contents;
@@ -38,6 +44,7 @@ public class Document {
 	private LocalDateTime creationDate;
 	private LocalDateTime lastSaveDate;
 	//maybe more
+	private boolean flag; //This variable is true when saveFile()/saveFileAs() calls newFile()
 	
 	public Document() {
 		speechFactory = new TextToSpeechApiFactory();
@@ -47,10 +54,25 @@ public class Document {
 		docGenerator = new DocumentGenerator();
 		//fileAuthor = null;
 		//fileTitle = null;
-		//creationDate = null;
-		//lastSaveDate = null;
+		creationDate = null;
+		lastSaveDate = null;
+		flag = false;
 	}
 	
+	/**
+	 * Pop's up a window that requests the user to give the file a title and an author.
+	 * You can press "Create" button to create the new file or "Cancel" button.
+	 * Does not continue when "Create" button is pressed, until user gives both title and author.
+	 * Sets the creation date and the last save date.
+	 * 
+	 * Initializes volume, speed, pitch and encoding strategy's values.
+	 * 
+	 * If this method has been called from saveFile() method, then flag = true
+	 * and after giving the file title and author, the file has to be saved, 
+	 * so it calls saveNewFile() method.
+	 * 
+	 * @param frame The application's main frame.
+	 */
 	public void newFile(FreeTTSWindow frame) {
 		//initialize preferences window 
 		frame.setVolumeValue(50);
@@ -92,12 +114,16 @@ public class Document {
 					// If user gave both title and author close newFileWindow
 					}else {
 						creationDate = LocalDateTime.now();
+						lastSaveDate = creationDate;
 						newFileFrame.dispose();
 						FileFilter txtFilter = new FileNameExtensionFilter("Plain text", "txt");
 						frame.setFileChooser(new JFileChooser());
 						frame.getFileChooser().setFileFilter(txtFilter);
 						frame.setTitle("NewFile*   -   FreeTTS Editor");
 						frame.getTextArea().setText(null);
+						if (flag == true) {
+							saveNewFile(frame);
+						}
 						return;
 					}
 					JOptionPane.showMessageDialog(null, message, "", JOptionPane.INFORMATION_MESSAGE);
@@ -142,6 +168,15 @@ public class Document {
 		}
 	}
 	
+	/**
+	 * Pop's up the OpenDialog window for the user to choose which file they
+	 * want to open. After selecting a file, updates the text area so as the user can 
+	 * see its contents and sets the frame's title to the current open file's path.
+	 * 
+	 * Initializes volume, speed, pitch and encoding strategy's values.
+	 * 
+	 * @param frame The application's main frame.
+	 */
 	public void openFile(FreeTTSWindow frame) { 
 		//initialize preferences window
 		frame.setVolumeValue(50);
@@ -163,26 +198,32 @@ public class Document {
 		}
 	}
 	
+	/**
+	 * Updates the file's content and the last saved date.
+	 * 
+	 * If the file to be saved does not exist (has not been saved before)
+	 * and if the user has not given the file title and author yet, calls newFile() 
+	 * so as the user gives these values first and then save the file.
+	 * 
+	 * If the file to be saved does not exist (has not been saved before),
+	 * but the user has already given the file title and author, the
+	 * file can now be saved, so it calls saveNewFile() method.
+	 * 
+	 * @param frame The application's main frame.
+	 */
 	public void saveFile(FreeTTSWindow frame) {
 		FileWriter fw = null;
 		String filePath;
-		// This file does not have a name yet
-		// Ask for a name
+		// This file does not exist
 		if (frame.getFileChooser().getSelectedFile() == null) {
-			if (frame.getFileChooser().showSaveDialog(null) == JFileChooser.APPROVE_OPTION) {
-				try {
-					filePath = frame.getFileChooser().getSelectedFile().getPath();
-					if (!filePath.endsWith(".txt")) {
-						filePath = filePath + ".txt";
-					}
-					fw = new FileWriter(filePath);
-					frame.getTextArea().write(fw);
-					fw.close();
-					lastSaveDate = LocalDateTime.now();
-					frame.setTitle(filePath + "   -   FreeTTS Editor");
-				}catch (IOException e) {
-					e.printStackTrace();
-				}
+			flag = true;		
+			if (fileTitle == null || fileAuthor == null) {
+				// Must create new file, to set values for fileTitle and fileAuthor
+				// and then save the file 
+				newFile(frame); //file is saved inside newFile(), since flag = true
+			}else {
+				// If user has given file title and author, the file can be saved
+				saveNewFile(frame);
 			}
 		// This file already exists
 		// Change existing file's content
@@ -201,27 +242,68 @@ public class Document {
 				e.printStackTrace();
 			}
 		}
+		
 	}
 	
-	public void saveFileAs(FreeTTSWindow frame) {
+	/**
+	 * This method is called when "Save" menu item is chosen and the the file 
+	 * does not exist already or when "SaveAs" menu item is chosen.
+	 * It pop's up the save dialog window, user gives the file a name,
+	 * and saves it to a directory.
+	 * Then, sets the frame's title to the current file's path and
+	 * sets the creation date and the last save date of the file.
+	 * 
+	 * @param frame The application's main frame.
+	 */
+	private void saveNewFile(FreeTTSWindow frame) {
+		FileWriter fw = null;
+		String filePath;
 		if (frame.getFileChooser().showSaveDialog(null) == JFileChooser.APPROVE_OPTION) {
-			FileWriter fw = null;
 			try {
-				String filePath = frame.getFileChooser().getSelectedFile().getPath();
+				filePath = frame.getFileChooser().getSelectedFile().getPath();
 				if (!filePath.endsWith(".txt")) {
 					filePath = filePath + ".txt";
 				}
 				fw = new FileWriter(filePath);
 				frame.getTextArea().write(fw);
 				fw.close();
-				lastSaveDate = LocalDateTime.now();
+				creationDate = LocalDateTime.now();
+				lastSaveDate = creationDate;
 				frame.setTitle(filePath + "   -   FreeTTS Editor");
 			}catch (IOException e) {
 				e.printStackTrace();
-			}
+			};
+		}
+		flag = false;
+	}
+	
+	/**
+	 * If the user has not given the file title and author yet, calls newFile() 
+	 * so as the user gives these values first and then save the file.
+	 * 
+	 * If the user has already given the file title and author, the
+	 * file can now be saved, so it calls saveNewFile() method.
+	 * 
+	 * @param frame The application's main frame.
+	 */
+	public void saveFileAs(FreeTTSWindow frame) {
+		flag = true;
+		if (fileTitle == null || fileAuthor == null) {
+			// Must create new file, to set values for fileTitle and fileAuthor
+			// and then save the file 
+			newFile(frame); //file is saved inside newFile(), since flag = true
+		}else {
+			// If user has given file title and author, the file can be saved
+			saveNewFile(frame);
 		}
 	}
 	
+	/**
+	 * TODO
+	 * 
+	 * @param
+	 * @return
+	 */
 	private String docContentsToString(String text) {
 		
 		contents = docGenerator.createDocData(text);	//refresh contents
@@ -242,15 +324,29 @@ public class Document {
 		return convertedText;
 	}
 	
+	/**
+	 * Keep the whole text into a string and then play it.
+	 * @param text The whole text of the text area.
+	 */
 	public void playAll(String text) {
 		String textToPlay = this.docContentsToString(text);
 		speechAPI.play(textToPlay);
 	}
 	
+	/**
+	 * If some text is selected, play it.
+	 * @param text The selected text of the text area.
+	 */
 	public void playSelected(String text) {
 		if (text != null) { speechAPI.play(text); }
 	}
 	
+	/**
+	 * Keep the whole text into a string, split this string into words 
+	 * kept in wordsToReverse[] array, reverse the array
+	 * and then play the reversed text.
+	 * @param text The whole text of the text area.
+	 */
 	public void playAllReverse(String text) {
 		String textToPlay = this.docContentsToString(text);
 		String[] wordsToReverse = textToPlay.split("\\s+");
@@ -261,6 +357,12 @@ public class Document {
 		speechAPI.play(reversedText);
 	}
 	
+	/**
+	 * If some text is selected, split this text into words 
+	 * kept in wordsToReverse[] array, reverse the array
+	 * and then play the reversed text.
+	 * @param text The selected text of the text area.
+	 */
 	public void playSelectedReverse(String text) {
 		if (text != null) {
 			String[] wordsToReverse = text.split("\\s+");
@@ -272,20 +374,36 @@ public class Document {
 		}
 	}
 	
+	/**
+	 * Keep the whole text into a string, encode and then play it.
+	 * @param text The whole text of the text area.
+	 */
 	public void playAllEncoded(String text) {
 		String textToEncode = this.docContentsToString(text);
 		String textToPlay = encoder.encode(textToEncode);
 		speechAPI.play(textToPlay);
 	}
 	
+	/**
+	 * If some text is selected, encode and play it.
+	 * @param text The selected text of the text area.
+	 */
 	public void playSelectedEncoded(String text) {
 		if (text != null) {
 			String textToPlay = encoder.encode(text);
 			speechAPI.play(textToPlay);
 		}
 	}
-		
-	public void saveSettings(float volume, float speed, float pitch, String strategy) {
+	
+	/**
+	 * TODO
+	 * 
+	 * @param volume
+	 * @param speed
+	 * @param pitch
+	 * @param strategy
+	 */
+	public void saveSettings(int volume, int speed, int pitch, String strategy) {
 		speechAPI.setVolume(volume);
 		speechAPI.setRate(speed);
 		speechAPI.setPich(pitch);

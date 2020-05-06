@@ -5,12 +5,23 @@ import java.awt.event.ActionListener;
 import gui.FreeTTSWindow;
 import model.Document;
 
+/**
+ * <h1> Command Factory </h1> 
+ * @author Vasiliki Kanakari
+ */
 
 public class CommandFactory {
-		
-	//will need more parameters
+	
+	private Document doc = new Document();
+	
+	/**
+	 * Creates the commands.
+	 * @param commandType The type of command requested
+	 * @param frame The application's main frame
+	 * @return ActionListener Returns either the action listener for the requested 
+	 * command or null in case of error.
+	 */
 	public ActionListener makeCommand(String commandType, FreeTTSWindow frame) {
-		Document doc = new Document();
 		switch(commandType) {
 			case "NewFileCommand":
 				return new NewFile(frame, doc);
@@ -38,7 +49,7 @@ public class CommandFactory {
 				return new PlayAllEncoded(frame, doc);
 			case "PlaySelectedEncoded":
 				return new PlaySelectedEncoded(frame, doc);
-			//add more cases
+			//TODO add more cases
 			default:
 				//should not reach here
 				return null;
