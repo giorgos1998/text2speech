@@ -48,9 +48,9 @@ public class Document {
 	
 	public Document() {
 		speechFactory = new TextToSpeechApiFactory();
-		speechAPI = speechFactory.createSpeechApi("FREETTS");	//default value
+		speechAPI = speechFactory.createSpeechApi("FREETTS"); //default value
 		encoderFactory = new EncStrategyFactory();
-		encoder = encoderFactory.createStrategy("ROT13");
+		encoder = encoderFactory.createStrategy("ROT13");	  //default value
 		docGenerator = new DocumentGenerator();
 		//fileAuthor = null;
 		//fileTitle = null;
@@ -65,7 +65,7 @@ public class Document {
 	 * Does not continue when "Create" button is pressed, until user gives both title and author.
 	 * Sets the creation date and the last save date.
 	 * 
-	 * Initializes volume, speed, pitch and encoding strategy's values.
+	 * Initializes volume, speed, pitch, encoding strategy and speech library's values.
 	 * 
 	 * If this method has been called from saveFile() method, then flag = true
 	 * and after giving the file title and author, the file has to be saved, 
@@ -78,7 +78,8 @@ public class Document {
 		frame.setVolumeValue(50);
 		frame.setSpeedValue(21);
 		frame.setPitchValue(11);
-		frame.setEncodingStrategy("");
+		frame.setEncodingStrategy("ROT13");
+		frame.setSpeechLibrary("FREETTS");
 				
 		// Pop's up a window that requests the user to give file's title and author
 		try {
@@ -120,9 +121,10 @@ public class Document {
 						frame.setFileChooser(new JFileChooser());
 						frame.getFileChooser().setFileFilter(txtFilter);
 						frame.setTitle("NewFile*   -   FreeTTS Editor");
-						frame.getTextArea().setText(null);
 						if (flag == true) {
 							saveNewFile(frame);
+						}else {
+							frame.getTextArea().setText(null);
 						}
 						return;
 					}
@@ -182,7 +184,8 @@ public class Document {
 		frame.setVolumeValue(50);
 		frame.setSpeedValue(21);
 		frame.setPitchValue(11);
-		frame.setEncodingStrategy("");
+		frame.setEncodingStrategy("ROT13");
+		frame.setSpeechLibrary("FREETTS");
 		
 		if (frame.getFileChooser().showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
 			String fileName = frame.getFileChooser().getSelectedFile().getAbsolutePath();
@@ -402,11 +405,13 @@ public class Document {
 	 * @param speed
 	 * @param pitch
 	 * @param strategy
+	 * @param library
 	 */
-	public void saveSettings(int volume, int speed, int pitch, String strategy) {
+	public void saveSettings(int volume, int speed, int pitch, String strategy, String library) {
 		speechAPI.setVolume(volume);
 		speechAPI.setRate(speed);
 		speechAPI.setPich(pitch);
 		encoder = encoderFactory.createStrategy(strategy);
+		speechAPI = speechFactory.createSpeechApi(library);
 	}
 }

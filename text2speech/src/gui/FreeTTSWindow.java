@@ -44,6 +44,7 @@ public class FreeTTSWindow extends JFrame{
 	private int speedValue = 21;
 	private int pitchValue = 11;
 	private String encodingStrategy = "";
+	private String speechLibrary = "";
 	
 	/**
 	 * Creates the main frame and sets its title,
@@ -261,6 +262,21 @@ public class FreeTTSWindow extends JFrame{
 	 */
 	public String getEncodingStrategy() {
 		return encodingStrategy;
+	}
+	
+	/**
+	 * Sets the speech library of the speech.
+	 * @param strat The value to be set to speech library.
+	 */
+	public void setSpeechLibrary(String lib) {
+		speechLibrary = lib;
+	}
+	
+	/**
+	 * @return String The current speech library the application uses.
+	 */
+	public String getSpeechLibrary() {
+		return speechLibrary;
 	}
 	
 }
