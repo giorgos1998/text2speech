@@ -1,5 +1,9 @@
 package model.textToSpeechAPI;
 
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+
 /**
  * <h1> FakeTTS Api Adapter </h1>
  * 
@@ -11,11 +15,25 @@ package model.textToSpeechAPI;
 
 public class FakeTTSadapter implements TextToSpeechApi {
 	
+	private File apiOutput;
+	
+	public FakeTTSadapter() {
+		apiOutput = new File("FakeTTSApiOut.txt");
+	}
+	
 	@Override
 	public void play(String textToPlay) {
 		System.out.println("This is a fake text to speech, it can only convert text to text.");
 		System.out.println("Here's your text:");
 		System.out.println(textToPlay);
+		try {
+			FileWriter fr = new FileWriter(apiOutput);
+			fr.write(textToPlay);
+			fr.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
 	}
 	@Override
 	public void setVolume(int volume) {

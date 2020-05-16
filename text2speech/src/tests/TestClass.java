@@ -22,12 +22,12 @@ public class TestClass {
 		CommandFactory testCommandFactory =  new CommandFactory();
 		
 		
-		//test making new file
+		//test making new file (US1)
 		testCommand = testCommandFactory.makeCommand("NewFileCommand", frame );
 		testCommand.actionPerformed(null);
 		assertEquals("Text should be empty when a new file is made.", "", frame.getTextArea().getText());
 		
-		//test saving in new file
+		//test saving in new file (US3)
 		frame.getTextArea().setText("Hello World!");
 		File testFile = new File("testSaveFile.txt");
 		frame.getFileChooser().setSelectedFile(testFile);
@@ -43,7 +43,7 @@ public class TestClass {
 			e.printStackTrace();
 		}
 		
-		//test opening an existing file
+		//test opening an existing file (US4)
 		//you have to select the correct file -.-
 		//(git repo-project folder)...\text2speech\text2speech\testSaveFile.txt
 		testCommand = testCommandFactory.makeCommand("OpenFileCommand", frame );
@@ -57,6 +57,24 @@ public class TestClass {
 		catch(FileNotFoundException e) {
 			e.printStackTrace();
 		}
+		
+		//test "playing sound" with play all command
+		/* UNFINISHED
+		frame.getTextArea().setText("Hello World!");
+		testCommand = testCommandFactory.makeCommand("TuneAudioCommand", frame );
+		testCommand.actionPerformed(null);
+		testCommand = testCommandFactory.makeCommand("PlayAllCommand", frame );
+		testCommand.actionPerformed(null);
+		testFile = new File("FakeTTSApiOut.txt");
+		try {
+			Scanner fileScanner = new Scanner(testFile);
+			assertEquals("Text in text area should be the same as in file .", 
+					fileScanner.nextLine(), frame.getTextArea().getText());
+			fileScanner.close();
+		}
+		catch(FileNotFoundException e) {
+			e.printStackTrace();
+		}*/
 		
 		
 	}
