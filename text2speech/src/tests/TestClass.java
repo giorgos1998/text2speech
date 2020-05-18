@@ -59,10 +59,10 @@ public class TestClass {
 		}
 		
 		//test "playing sound" with play all command
-		/* UNFINISHED
 		frame.getTextArea().setText("Hello World!");
-		testCommand = testCommandFactory.makeCommand("TuneAudioCommand", frame );
-		testCommand.actionPerformed(null);
+		frame.setSpeechLibrary("FAKETTS");
+		//testCommand = testCommandFactory.makeCommand("TuneAudioCommand", frame );
+		//testCommand.actionPerformed(null);
 		testCommand = testCommandFactory.makeCommand("PlayAllCommand", frame );
 		testCommand.actionPerformed(null);
 		testFile = new File("FakeTTSApiOut.txt");
@@ -74,7 +74,7 @@ public class TestClass {
 		}
 		catch(FileNotFoundException e) {
 			e.printStackTrace();
-		}*/
+		}
 		
 		
 	}
