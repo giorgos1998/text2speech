@@ -14,15 +14,18 @@ import commands.CommandFactory;
 import gui.FreeTTSWindow;
 
 public class TestClass {
-
+	
+	public Document doc;
+	public File testFile = new File("testSaveFile.txt");
+	public FreeTTSWindow frame;
+	public ActionListener testCommand;
+	public CommandFactory testCommandFactory =  new CommandFactory();
+	
+	
 	@Test
-	public void testMain() {
-		ActionListener testCommand;
-		File testFile = new File("testSaveFile.txt");
-		CommandFactory testCommandFactory =  new CommandFactory();
-		Document doc;
+	public void testFileMakingSavingOpening() {
+		
 		Launcher.main(null);
-		FreeTTSWindow frame = Launcher.frame;
 		
 		//test making new file (US1)
 		testCommand = testCommandFactory.makeCommand("NewFileCommand", frame );
@@ -46,7 +49,7 @@ public class TestClass {
 		
 		//test opening an existing file (US4)
 		//you have to select the correct file -.-
-		//(git repo-project folder)...\text2speech\text2speech\testSaveFile.txt
+		//(git repo / project folder)...\text2speech\text2speech\testSaveFile.txt
 		testCommand = testCommandFactory.makeCommand("OpenFileCommand", frame );
 		testCommand.actionPerformed(null);
 		try {
@@ -58,7 +61,13 @@ public class TestClass {
 		catch(FileNotFoundException e) {
 			e.printStackTrace();
 		}
+	}
+	
+	@Test
+	public void testPlayingSound() {	
 		
+		Launcher.main(null);
+		frame = Launcher.frame;
 		//test "playing sound" with PlayAll command (US5-6)
 		/* UFINISHED, needs reference to doc
 		frame.getTextArea().setText("Hello World!");
@@ -109,7 +118,12 @@ public class TestClass {
 		catch(FileNotFoundException e) {
 			e.printStackTrace();
 		}*/
-		
+	}
+	
+	@Test
+	public void testSettings() {	
+		Launcher.main(null);
+		frame = Launcher.frame;
 		//test settings (US11-12)
 		frame.setVolumeValue(100);
 		assertEquals("Volume in frame should be the same as set.",frame.getVolumeValue(),100);
@@ -121,8 +135,21 @@ public class TestClass {
 		assertEquals("Volume in frame should be the same as set.",frame.getEncodingStrategy(),"ATBASH");
 		frame.setSpeechLibrary("FREETTS");
 		assertEquals("Volume in frame should be the same as set.",frame.getSpeechLibrary(),"FREETTS");
-		
-		
 	}
 	
+	@Test
+	public void testReplayCommands() {	
+		Launcher.main(null);
+		frame = Launcher.frame;
+		
+		ActionListener[] commands = new ActionListener[5];
+		commands[0] = testCommandFactory.makeCommand("NewFileCommand", frame );
+		frame.getTextArea().setText("Hello world replay!");
+		frame.getFileChooser().setSelectedFile(testFile);
+		commands[1] = testCommandFactory.makeCommand("SaveFileCommand", frame );
+		commands[2] = testCommandFactory.makeCommand("OpenFileCommand", frame );
+		commands[3] = testCommandFactory.makeCommand("PlayAllCommand", frame );
+		commands[3] = testCommandFactory.makeCommand("PlayAllCommand", frame );
+		frame.setVolumeValue(100);
+	}
 }
