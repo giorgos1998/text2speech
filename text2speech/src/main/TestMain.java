@@ -1,11 +1,11 @@
 package main;
 
 import commands.Command;
-import commands.CommandCache;
 
 public class TestMain {
 
 	public static void main(String[] args) {
+		/* commented out because errors XD
 		CommandCache cache = new CommandCache();
 		cache.loadCache();
 		Command clone1 = cache.getCommand("TESTCOMMAND", true);
@@ -22,7 +22,7 @@ public class TestMain {
 		Command clone2 = cache.getCommand("TESTCOMMAND", true);
 		System.out.println();
 		System.out.println("Clone 2:");
-		clone2.execute();
+		clone2.execute();*/
 	}
 
 }
