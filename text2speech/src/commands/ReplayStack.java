@@ -1,12 +1,37 @@
 package commands;
 
-public class ReplayStack {
+import java.util.ArrayList;
 
-	public void addToStack(Command clone) {
-		// TODO add command to stack
+/**
+ * <h1> Replay Stack </h1> 
+ * @author John Rizos
+ */
+
+
+public class ReplayStack {
+	
+	ArrayList<Command> stack;	//FIFO stack for commands
+	
+	public ReplayStack() {
+		stack = new ArrayList<Command>();
 	}
 	
+	/**
+	 * adds a command to the tail of the stack
+	 * @param clone Command to be replayed
+	 */
+	public void addToStack(Command clone) {
+		stack.add(clone);
+	}
+	
+	/**
+	 * plays all commands from head to tail,
+	 * then empties the stack for next command recording
+	 */
 	public void playCommands() {
-		//TODO call execute() on each command
+		for(Command cmd:stack) {
+			cmd.execute();
+		}
+		stack.clear();
 	}
 }

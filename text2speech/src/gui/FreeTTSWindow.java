@@ -163,6 +163,7 @@ public class FreeTTSWindow extends JFrame{
 		guidelines = new JMenuItem("Guidelines");
 		helpMenu.add(guidelines);
 		
+		manager = new CommandManager();
 		createListeners();
 		
 		/*

@@ -1,5 +1,11 @@
 package tests;
 
+/**
+ * <h1> Test Class </h1> 
+ * @author John Rizos
+ */
+
+
 import static org.junit.Assert.*;
 import java.awt.event.ActionListener;
 import java.util.Scanner;
@@ -10,7 +16,7 @@ import org.junit.Test;
 
 import main.Launcher;
 import model.Document;
-import commands.CommandFactory;
+import commands.CommandManager;
 import gui.FreeTTSWindow;
 
 public class TestClass {
@@ -19,7 +25,7 @@ public class TestClass {
 	public File testFile = new File("testSaveFile.txt");
 	public FreeTTSWindow frame;
 	public ActionListener testCommand;
-	public CommandFactory testCommandFactory =  new CommandFactory();
+	public CommandManager testCommandFactory =  new CommandManager();
 	
 	
 	@Test
@@ -28,14 +34,14 @@ public class TestClass {
 		Launcher.main(null);
 		
 		//test making new file (US1)
-		testCommand = testCommandFactory.makeCommand("NewFileCommand", frame );
+		testCommand = testCommandFactory.getCommand("NewFileCommand");
 		testCommand.actionPerformed(null);
 		assertEquals("Text should be empty when a new file is made.", "", frame.getTextArea().getText());
 		
 		//test saving in new file (US3)
 		frame.getTextArea().setText("Hello World!");
 		frame.getFileChooser().setSelectedFile(testFile);
-		testCommand = testCommandFactory.makeCommand("SaveFileCommand", frame );
+		testCommand = testCommandFactory.getCommand("SaveFileCommand");
 		testCommand.actionPerformed(null);
 		try {
 			Scanner fileScanner = new Scanner(testFile);
@@ -48,9 +54,9 @@ public class TestClass {
 		}
 		
 		//test opening an existing file (US4)
-		//you have to select the correct file -.-
+		//you have to select the correct file
 		//(git repo / project folder)...\text2speech\text2speech\testSaveFile.txt
-		testCommand = testCommandFactory.makeCommand("OpenFileCommand", frame );
+		testCommand = testCommandFactory.getCommand("OpenFileCommand");
 		testCommand.actionPerformed(null);
 		try {
 			Scanner fileScanner = new Scanner(testFile);
@@ -143,13 +149,13 @@ public class TestClass {
 		frame = Launcher.frame;
 		
 		ActionListener[] commands = new ActionListener[5];
-		commands[0] = testCommandFactory.makeCommand("NewFileCommand", frame );
+		commands[0] = testCommandFactory.getCommand("NewFileCommand");
 		frame.getTextArea().setText("Hello world replay!");
 		frame.getFileChooser().setSelectedFile(testFile);
-		commands[1] = testCommandFactory.makeCommand("SaveFileCommand", frame );
-		commands[2] = testCommandFactory.makeCommand("OpenFileCommand", frame );
-		commands[3] = testCommandFactory.makeCommand("PlayAllCommand", frame );
-		commands[3] = testCommandFactory.makeCommand("PlayAllCommand", frame );
+		commands[1] = testCommandFactory.getCommand("SaveFileCommand");
+		commands[2] = testCommandFactory.getCommand("OpenFileCommand");
+		commands[3] = testCommandFactory.getCommand("PlayAllCommand");
+		commands[3] = testCommandFactory.getCommand("PlayAllCommand");
 		frame.setVolumeValue(100);
 	}
 }
