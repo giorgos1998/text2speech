@@ -17,5 +17,5 @@ public abstract class Command implements ActionListener, Cloneable{
 		return clone;
 	}
 	
-	public abstract void setNum(int num);
+	public abstract void setCloneFlag(boolean value);
 }

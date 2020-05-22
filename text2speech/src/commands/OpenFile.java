@@ -4,14 +4,13 @@ import gui.FreeTTSWindow;
 import model.Document;
 
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 /**
  * <h1> Open File Command </h1> 
  * @author Vasiliki Kanakari
  */
 
-public class OpenFile implements ActionListener{
+public class OpenFile extends Command{
 	
 	private FreeTTSWindow frame;
 	private Document doc;
@@ -23,7 +22,16 @@ public class OpenFile implements ActionListener{
 		
 	@Override
 	public void actionPerformed(ActionEvent ev) {
+		execute();
+	}
+
+	@Override
+	public void execute() {
 		doc.openFile(frame);
 	}
 	
+	@Override
+	public void setCloneFlag(boolean value) {
+		//do nothing, cannot be cloned
+	}
 }

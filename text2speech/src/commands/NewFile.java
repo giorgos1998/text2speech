@@ -4,14 +4,13 @@ import gui.FreeTTSWindow;
 import model.Document;
 
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 /**
  * <h1> New File Command </h1> 
  * @author Vasiliki Kanakari
  */
 
-public class NewFile implements ActionListener{
+public class NewFile extends Command{
 	
 	private FreeTTSWindow frame;
 	private Document doc;
@@ -23,7 +22,16 @@ public class NewFile implements ActionListener{
 		
 	@Override
 	public void actionPerformed(ActionEvent ev) {
+		execute();
+	}
+
+	@Override
+	public void execute() {
 		doc.newFile(frame);
 	}
 	
+	@Override
+	public void setCloneFlag(boolean value) {
+		//do nothing, cannot be cloned
+	}
 }

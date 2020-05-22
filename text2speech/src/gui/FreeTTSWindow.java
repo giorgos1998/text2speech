@@ -6,11 +6,13 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.*;
+import javax.swing.GroupLayout.Alignment;
+import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.border.LineBorder;
 import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
-import commands.CommandFactory;
+import commands.CommandManager;
 
 /**
  * <h1> FreeTTS Main Window </h1>
@@ -22,6 +24,7 @@ import commands.CommandFactory;
  * @author Vasiliki Kanakari
  */
 
+@SuppressWarnings("serial")
 public class FreeTTSWindow extends JFrame{
 	
 	private JTextArea textArea = new JTextArea(10, 10);
@@ -37,15 +40,29 @@ public class FreeTTSWindow extends JFrame{
 	private JMenuItem playSelRevMenuItem;
 	private JMenuItem playAllEncMenuItem;
 	private JMenuItem playSelEncMenuItem;
-	// ADD MORE...
+	private JMenuItem startRecMenuItem;
+	private JMenuItem stopRecMenuItem;
+	private JMenuItem playRecMenuItem;
 	private JMenuItem preferencesMenuItem;
 	private JMenuItem guidelines;
+	
+	//default values
 	private int volumeValue = 50;
 	private int speedValue = 21;
 	private int pitchValue = 11;
-	private String encodingStrategy = "";
-	private String speechLibrary = "";
+	private String encodingStrategy = "ROT13";
+	private String speechLibrary = "FREETTS";
 	
+	private CommandManager manager;
+	
+	//Preferences menu
+	private JFrame preferencesFrame;
+	private JSlider volumeSlider;
+	private JSlider speedSlider;
+	private JSlider pitchSlider;
+	private JComboBox<String> strategyBox;
+	private JComboBox<String> libraryBox;
+
 	/**
 	 * Creates the main frame and sets its title,
 	 * the menus and their menu items,
@@ -123,18 +140,18 @@ public class FreeTTSWindow extends JFrame{
 		speechMenu.add(preferencesMenuItem);
 		
 		/* 
-		 *  ACTION READER MENU 
+		 *  ACTION RECORDER MENU 
 		 */
 		JMenu actionReaderMenu = new JMenu("Action Recorder");
 		menuBar.add(actionReaderMenu);
 		
-		JMenuItem startRecMenuItem = new JMenuItem("Start Recording");
+		startRecMenuItem = new JMenuItem("Start Recording");
 		actionReaderMenu.add(startRecMenuItem);
 		
-		JMenuItem stopRecMenuItem = new JMenuItem("Stop Recording");
+		stopRecMenuItem = new JMenuItem("Stop Recording");
 		actionReaderMenu.add(stopRecMenuItem);
 		
-		JMenuItem playRecMenuItem = new JMenuItem("Play Recorded");
+		playRecMenuItem = new JMenuItem("Play Recorded");
 		actionReaderMenu.add(playRecMenuItem);
 		
 		/* 
@@ -165,21 +182,124 @@ public class FreeTTSWindow extends JFrame{
 	 * Creates an action listener for each and every menu item
 	 */		
 	public void createListeners() {
-		CommandFactory factory = new CommandFactory();
-		newMenuItem.addActionListener(factory.makeCommand("NewFileCommand", this));
-		openMenuItem.addActionListener(factory.makeCommand("OpenFileCommand", this));
-		saveMenuItem.addActionListener(factory.makeCommand("SaveFileCommand", this));
-		saveAsMenuItem.addActionListener(factory.makeCommand("SaveAsFileCommand", this));
-		exitMenuItem.addActionListener(factory.makeCommand("ExitCommand", this));
-		playAllMenuItem.addActionListener(factory.makeCommand("PlayAllCommand", this));
-		playSelectedMenuItem.addActionListener(factory.makeCommand("PlaySelectedCommand", this));
-		playAllRevMenuItem.addActionListener(factory.makeCommand("PlayAllReverse", this));
-		playSelRevMenuItem.addActionListener(factory.makeCommand("PlaySelectedReverse", this));
-		playAllEncMenuItem.addActionListener(factory.makeCommand("PlayAllEncoded", this));
-		playSelEncMenuItem.addActionListener(factory.makeCommand("PlaySelectedEncoded", this));
-		//TODO ADD MORE LISTENERS...
-		preferencesMenuItem.addActionListener(factory.makeCommand("TuneAudioCommand", this));
-		guidelines.addActionListener(factory.makeCommand("HelpCommand", this));
+		newMenuItem.addActionListener(manager.getCommand("NewFileCommand"));
+		openMenuItem.addActionListener(manager.getCommand("OpenFileCommand"));
+		saveMenuItem.addActionListener(manager.getCommand("SaveFileCommand"));
+		saveAsMenuItem.addActionListener(manager.getCommand("SaveAsFileCommand"));
+		exitMenuItem.addActionListener(manager.getCommand("ExitCommand"));
+		playAllMenuItem.addActionListener(manager.getCommand("PlayAllCommand"));
+		playSelectedMenuItem.addActionListener(manager.getCommand("PlaySelectedCommand"));
+		playAllRevMenuItem.addActionListener(manager.getCommand("PlayAllReverse"));
+		playSelRevMenuItem.addActionListener(manager.getCommand("PlaySelectedReverse"));
+		playAllEncMenuItem.addActionListener(manager.getCommand("PlayAllEncoded"));
+		playSelEncMenuItem.addActionListener(manager.getCommand("PlaySelectedEncoded"));
+		startRecMenuItem.addActionListener(manager.getCommand("StartRecording"));
+		stopRecMenuItem.addActionListener(manager.getCommand("StopRecording"));
+		playRecMenuItem.addActionListener(manager.getCommand("RunRecording"));
+		preferencesMenuItem.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent ev) {
+				openPreferencesWindow();
+			}
+		});
+		guidelines.addActionListener(manager.getCommand("HelpCommand"));
+	}
+	
+	/**
+	 * Creates preferences window
+	 */
+	private void openPreferencesWindow() {
+		preferencesFrame = new JFrame();
+		preferencesFrame.setTitle("Preferences");
+		preferencesFrame.setBounds(400, 200, 482, 435);
+		preferencesFrame.setResizable(false);
+		preferencesFrame.setVisible(true);
+						
+		JLabel volumeLabel = new JLabel("Volume");		
+		JLabel speedLabel = new JLabel("Speed");	
+		JLabel pitchLabel = new JLabel("Pitch");
+		JLabel encodingStrategyLabel = new JLabel("Encoding Strategy");
+		JLabel speechLibrarylabel = new JLabel("Speech Library");
+		
+		volumeSlider = new JSlider();		
+		volumeSlider.setValue(volumeValue);
+		volumeSlider.setBorder(new LineBorder(SystemColor.activeCaption));	
+		
+		speedSlider = new JSlider();
+		speedSlider.setValue(speedValue);
+		speedSlider.setBorder(new LineBorder(SystemColor.activeCaption));		
+		
+		pitchSlider = new JSlider();
+		pitchSlider.setValue(pitchValue);
+		pitchSlider.setBorder(new LineBorder(SystemColor.activeCaption));			
+		
+		strategyBox = new JComboBox<String>();
+		strategyBox.addItem("ROT13");
+		strategyBox.addItem("ATBASH");
+		strategyBox.setSelectedItem(encodingStrategy);
+		
+		libraryBox = new JComboBox<String>();
+		libraryBox.addItem("FREETTS");
+		libraryBox.addItem("FAKETTS");
+		libraryBox.setSelectedItem(speechLibrary);
+		
+		JButton applyButton = new JButton("Apply");
+		applyButton.addActionListener(manager.getCommand("TuneAudioCommand"));
+		
+		JButton cancelButton = new JButton("Cancel");
+		cancelButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent ev) {
+				preferencesFrame.dispose();
+			}
+		});
+		
+		GroupLayout groupLayout = new GroupLayout(preferencesFrame.getContentPane());
+		groupLayout.setHorizontalGroup(
+			groupLayout.createParallelGroup(Alignment.LEADING)
+				.addGroup(groupLayout.createSequentialGroup().addContainerGap(307, Short.MAX_VALUE)
+				.addComponent(applyButton).addGap(18).addComponent(cancelButton).addGap(33))
+				.addGroup(groupLayout.createSequentialGroup().addGap(50).addGroup(groupLayout.createParallelGroup(Alignment.TRAILING)
+				.addGroup(groupLayout.createSequentialGroup()
+				.addComponent(speechLibrarylabel, GroupLayout.PREFERRED_SIZE, 120, GroupLayout.PREFERRED_SIZE)
+				.addGap(18).addComponent(libraryBox, GroupLayout.PREFERRED_SIZE, 140, GroupLayout.PREFERRED_SIZE))
+				.addGroup(groupLayout.createSequentialGroup().addGroup(groupLayout.createParallelGroup(Alignment.TRAILING)
+				.addGroup(groupLayout.createSequentialGroup()
+				.addComponent(encodingStrategyLabel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+				.addGap(18).addComponent(strategyBox, GroupLayout.PREFERRED_SIZE, 140, GroupLayout.PREFERRED_SIZE))
+				.addGroup(groupLayout.createSequentialGroup()
+				.addComponent(pitchLabel, GroupLayout.PREFERRED_SIZE, 62, GroupLayout.PREFERRED_SIZE)
+				.addPreferredGap(ComponentPlacement.RELATED)
+				.addComponent(pitchSlider, GroupLayout.PREFERRED_SIZE, 212, GroupLayout.PREFERRED_SIZE))
+				.addGroup(groupLayout.createSequentialGroup()
+				.addComponent(speedLabel, GroupLayout.PREFERRED_SIZE, 62, GroupLayout.PREFERRED_SIZE)
+				.addPreferredGap(ComponentPlacement.RELATED)
+				.addComponent(speedSlider, GroupLayout.PREFERRED_SIZE, 212, GroupLayout.PREFERRED_SIZE))
+				.addGroup(groupLayout.createSequentialGroup()
+				.addComponent(volumeLabel, GroupLayout.PREFERRED_SIZE, 62, GroupLayout.PREFERRED_SIZE)
+				.addPreferredGap(ComponentPlacement.RELATED)
+				.addComponent(volumeSlider, GroupLayout.PREFERRED_SIZE, 212, GroupLayout.PREFERRED_SIZE)))
+				.addPreferredGap(ComponentPlacement.RELATED))).addContainerGap(150, Short.MAX_VALUE))
+		);
+		groupLayout.setVerticalGroup(
+			groupLayout.createParallelGroup(Alignment.LEADING)
+				.addGroup(groupLayout.createSequentialGroup().addGap(42).addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+				.addComponent(volumeSlider, GroupLayout.PREFERRED_SIZE, 33, GroupLayout.PREFERRED_SIZE)
+				.addComponent(volumeLabel, GroupLayout.PREFERRED_SIZE, 24, GroupLayout.PREFERRED_SIZE))
+				.addGap(33).addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+				.addComponent(speedSlider, GroupLayout.PREFERRED_SIZE, 33, GroupLayout.PREFERRED_SIZE)
+				.addComponent(speedLabel, GroupLayout.PREFERRED_SIZE, 24, GroupLayout.PREFERRED_SIZE))
+				.addGap(31).addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+				.addComponent(pitchSlider, GroupLayout.PREFERRED_SIZE, 33, GroupLayout.PREFERRED_SIZE)
+				.addComponent(pitchLabel, GroupLayout.PREFERRED_SIZE, 24, GroupLayout.PREFERRED_SIZE))
+				.addGap(29).addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
+				.addComponent(strategyBox, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+				.addComponent(encodingStrategyLabel, GroupLayout.PREFERRED_SIZE, 24, GroupLayout.PREFERRED_SIZE))
+				.addPreferredGap(ComponentPlacement.RELATED, 37, Short.MAX_VALUE).addGroup(groupLayout.createParallelGroup(Alignment.TRAILING)
+				.addComponent(libraryBox, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+				.addComponent(speechLibrarylabel, GroupLayout.PREFERRED_SIZE, 24, GroupLayout.PREFERRED_SIZE))
+				.addGap(29).addGroup(groupLayout.createParallelGroup(Alignment.BASELINE).addComponent(cancelButton)
+				.addComponent(applyButton)).addGap(29))
+		);
+		preferencesFrame.getContentPane().setLayout(groupLayout);
 	}
 	
 	/**
@@ -213,10 +333,10 @@ public class FreeTTSWindow extends JFrame{
 	}
 	
 	/**
-	 * @return int The current volume value the application uses.
+	 * @return int The current volume value the user chose.
 	 */
 	public int getVolumeValue() {
-		return volumeValue;
+		return volumeSlider.getValue();
 	}
 	
 	/**
@@ -228,10 +348,10 @@ public class FreeTTSWindow extends JFrame{
 	}
 	
 	/**
-	 * @return int The current speed value the application uses.
+	 * @return int The current speed value the user chose.
 	 */
 	public int getSpeedValue() {
-		return speedValue;
+		return speedSlider.getValue();
 	}
 	
 	/**
@@ -243,10 +363,10 @@ public class FreeTTSWindow extends JFrame{
 	}
 	
 	/**
-	 * @return int The current pitch value the application uses.
+	 * @return int The current pitch value the user chose.
 	 */
 	public int getPitchValue() {
-		return pitchValue;
+		return pitchSlider.getValue();
 	}
 		
 	/**
@@ -258,10 +378,10 @@ public class FreeTTSWindow extends JFrame{
 	}
 	
 	/**
-	 * @return String The current encoding strategy the application uses.
+	 * @return String The current encoding strategy the user chose.
 	 */
 	public String getEncodingStrategy() {
-		return encodingStrategy;
+		return String.valueOf(strategyBox.getSelectedItem());
 	}
 	
 	/**
@@ -273,10 +393,14 @@ public class FreeTTSWindow extends JFrame{
 	}
 	
 	/**
-	 * @return String The current speech library the application uses.
+	 * @return String The current speech library the user chose.
 	 */
 	public String getSpeechLibrary() {
-		return speechLibrary;
+		return String.valueOf(libraryBox.getSelectedItem());
+	}
+	
+	public void closePreferencesWindow() {
+		preferencesFrame.dispose();
 	}
 	
 }
