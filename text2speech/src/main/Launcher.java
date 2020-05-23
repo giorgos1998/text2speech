@@ -18,6 +18,7 @@ public class Launcher{
 		Document doc = new Document();
 		CommandManager manager = new CommandManager();
 		manager.loadCache(frame, doc);
+		frame.createListeners(manager);;
 		
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {

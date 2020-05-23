@@ -18,3 +18,8 @@
 /TuneAudio.class
 /sasa$1.class
 /sasa.class
+/CommandManager.class
+/ReplayStack.class
+/RunRecording.class
+/StartRecording.class
+/StopRecording.class

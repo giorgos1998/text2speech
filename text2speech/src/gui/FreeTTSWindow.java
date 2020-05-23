@@ -162,9 +162,7 @@ public class FreeTTSWindow extends JFrame{
 		
 		guidelines = new JMenuItem("Guidelines");
 		helpMenu.add(guidelines);
-		
-		createListeners();
-		
+				
 		/*
 		 * 	LINE TESTING STUFF
 		 */
@@ -181,7 +179,8 @@ public class FreeTTSWindow extends JFrame{
 	/** 
 	 * Creates an action listener for each and every menu item
 	 */		
-	public void createListeners() {
+	public void createListeners(CommandManager manager) {
+		this.manager = manager;
 		newMenuItem.addActionListener(manager.getCommand("NewFileCommand"));
 		openMenuItem.addActionListener(manager.getCommand("OpenFileCommand"));
 		saveMenuItem.addActionListener(manager.getCommand("SaveFileCommand"));
