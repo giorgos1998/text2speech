@@ -45,6 +45,7 @@ public class CommandManager {
 		commandCache.put("StartRecording", new StartRecording(this));
 		commandCache.put("StopRecording", new StopRecording(this));
 		commandCache.put("RunRecording", new RunRecording(this, stack));
+		commandCache.put("DisplayInfo", new DisplayInfo(frame, doc));
 	}
 	
 	public void startRecording() {

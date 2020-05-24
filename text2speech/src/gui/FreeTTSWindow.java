@@ -5,6 +5,7 @@ import java.awt.SystemColor;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 import javax.swing.*;
 import javax.swing.GroupLayout.Alignment;
@@ -34,6 +35,7 @@ public class FreeTTSWindow extends JFrame{
 	private JMenuItem openMenuItem;
 	private JMenuItem saveMenuItem;
 	private JMenuItem saveAsMenuItem;
+	private JMenuItem infoMenuItem;
 	private JMenuItem exitMenuItem;
 	private JMenuItem playAllMenuItem;
 	private JMenuItem playSelectedMenuItem;
@@ -111,6 +113,11 @@ public class FreeTTSWindow extends JFrame{
 		
 		fileMenu.addSeparator();
 		
+		infoMenuItem = new JMenuItem("Info");
+		fileMenu.add(infoMenuItem);
+		
+		fileMenu.addSeparator();
+		
 		exitMenuItem = new JMenuItem("Exit");
 		fileMenu.add(exitMenuItem);
 		
@@ -169,7 +176,7 @@ public class FreeTTSWindow extends JFrame{
 				
 		/*
 		 * 	LINE TESTING STUFF
-		 */
+		 * 
 		JButton countLines = new JButton("Count lines");
 		countLines.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent ev) {
@@ -178,15 +185,8 @@ public class FreeTTSWindow extends JFrame{
 			}
 		});
 		menuBar.add(countLines);
+		*/
 		
-		JButton infoButton = new JButton("File Info");
-		infoButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent ev) {
-				//TODO
-				//openInfoWindow();
-			}
-		});
-		menuBar.add(infoButton);
 	}
 	
 	/** 
@@ -214,6 +214,7 @@ public class FreeTTSWindow extends JFrame{
 			}
 		});
 		guidelines.addActionListener(manager.getCommand("HelpCommand"));
+		infoMenuItem.addActionListener(manager.getCommand("DisplayInfo"));
 	}
 	
 	/**
@@ -326,16 +327,18 @@ public class FreeTTSWindow extends JFrame{
 		infoFrame = new JFrame();
 		infoFrame.setTitle("File Info");
 		infoFrame.setBounds(300, 250, 350, 300);
-		infoFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		infoFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		infoFrame.setResizable(false);
 		infoFrame.setVisible(true);;
 		
-		JLabel titleLabel = new JLabel("Title:");
-		JLabel authorLabel = new JLabel("Author:");	
-		JLabel creationDateLabel = new JLabel("Creation Date:");
-		JLabel lastSaveDateLabel = new JLabel("Last Save Date:");
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
 		
-		JButton cancelButton = new JButton("Cancel");
+		JLabel titleLabel = new JLabel("Title: " + title);
+		JLabel authorLabel = new JLabel("Author: " + author);	
+		JLabel creationDateLabel = new JLabel("Creation Date: " + creationDate.format(formatter));
+		JLabel lastSaveDateLabel = new JLabel("Last Save Date: " + lastSaveDate.format(formatter));
+		
+		JButton cancelButton = new JButton("Close");
 		cancelButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent ev) {
 				infoFrame.dispose();

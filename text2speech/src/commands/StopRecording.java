@@ -2,6 +2,8 @@ package commands;
 
 import java.awt.event.ActionEvent;
 
+import javax.swing.JOptionPane;
+
 public class StopRecording extends Command{
 	
 	private CommandManager manager;
@@ -21,7 +23,7 @@ public class StopRecording extends Command{
 			manager.stopRecording();
 		}
 		else {
-			//TODO display error message
+			JOptionPane.showMessageDialog(null, "Recording has not started yet!", "", JOptionPane.INFORMATION_MESSAGE);
 		}
 	}
 	

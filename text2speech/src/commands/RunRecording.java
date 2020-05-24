@@ -2,6 +2,8 @@ package commands;
 
 import java.awt.event.ActionEvent;
 
+import javax.swing.JOptionPane;
+
 public class RunRecording extends Command{
 	
 	private CommandManager manager;
@@ -19,11 +21,16 @@ public class RunRecording extends Command{
 
 	@Override
 	public void execute() {
-		if (!manager.isRecording()) {
-			stack.playCommands();
+		if (stack.isEmpty()) {
+			JOptionPane.showMessageDialog(null, "Replay stack is empty!", "", JOptionPane.INFORMATION_MESSAGE);
 		}
 		else {
-			//TODO display error message
+			if (!manager.isRecording()) {
+				stack.playCommands();
+			}
+			else {
+				JOptionPane.showMessageDialog(null, "Stop recording to replay commands!", "", JOptionPane.INFORMATION_MESSAGE);
+			}
 		}
 	}
 	

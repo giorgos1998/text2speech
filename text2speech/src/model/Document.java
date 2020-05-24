@@ -453,11 +453,11 @@ public class Document {
 	 * @param library
 	 */
 	public void saveSettings(int volume, int speed, int pitch, String strategy, String library) {
+		encoder = encoderFactory.createStrategy(strategy);
+		speechAPI = speechFactory.createSpeechApi(library);
 		speechAPI.setVolume(volume);
 		speechAPI.setRate(speed);
 		speechAPI.setPich(pitch);
-		encoder = encoderFactory.createStrategy(strategy);
-		speechAPI = speechFactory.createSpeechApi(library);
 	}
 	
 	public String getOpenFilePath() {
