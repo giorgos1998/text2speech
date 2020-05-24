@@ -10,7 +10,7 @@ import java.util.ArrayList;
 
 public class ReplayStack {
 	
-	ArrayList<Command> stack;	//FIFO stack for commands
+	private ArrayList<Command> stack;	//FIFO stack for commands
 	
 	public ReplayStack() {
 		stack = new ArrayList<Command>();
@@ -34,4 +34,5 @@ public class ReplayStack {
 		}
 		stack.clear();
 	}
+	
 }

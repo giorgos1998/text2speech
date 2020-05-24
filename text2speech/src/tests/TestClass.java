@@ -3,6 +3,21 @@ package tests;
 /**
  * <h1> Test Class </h1> 
  * @author John Rizos
+ * 
+ * Tests US1 to US13
+ * 
+ * US2 does not need to be tested since we did not implement an EditDocument command
+ * all the text is held in the frame textArea until needed when it's taken by the document
+ * 
+ * US6-8-10 there is no point in testing the playSelected commands since the textArea
+ * is sure to return the selected text correctly and then it's played in the TTS like the playAll
+ * commands
+ * 
+ * US13 is not tested since the replay command feature is not fully implemented.
+ * 
+ * I used file output from FakeTTS in order to test playing text and settings because checking
+ * those would require tweaking the document to either somehow gain access to the FakeTTS object
+ * or the doc's private fields.
  */
 
 
@@ -121,7 +136,7 @@ public class TestClass {
 		testCommand.actionPerformed(null);
 		try {
 			Scanner fileScanner = new Scanner(testFile);
-			assertEquals("Text in text area should be the same as in file.", 
+			assertEquals("Text in text area should be the same as in TTS output file.", 
 					fileScanner.nextLine(), "Hello World!");
 			fileScanner.close();
 		}
@@ -143,7 +158,7 @@ public class TestClass {
 		testCommand.actionPerformed(null);
 		try {
 			Scanner fileScanner = new Scanner(testFile);
-			assertEquals("Text in file should be the reverse of text area.", 
+			assertEquals("Text in TTS output file should be the reverse of text area.", 
 					fileScanner.nextLine(), "World! Hello ");
 			fileScanner.close();
 		}
@@ -164,7 +179,7 @@ public class TestClass {
 		testCommand.actionPerformed(null);
 		try {
 			Scanner fileScanner = new Scanner(testFile);
-			assertEquals("Text in file should be the encoded of text area.", 
+			assertEquals("Text in TTS output file should be the encoded of text area.", 
 					fileScanner.nextLine(), "Uryyb Jbeyq!");
 			fileScanner.close();
 		}
@@ -177,22 +192,60 @@ public class TestClass {
 	public void testSettings() {
 		Launcher.main(null);
 		frame = Launcher.frame;
+		doc = Launcher.doc;
+		testCommandFactory = Launcher.manager;
 		
+		/**Test case 7
+		 * test changing Api settings with doc.saveSettings (US11)
+		 * Since the Tune adio command basically calls that document method
+		 * with the preferences that have been set by the user, we can directly call
+		 * it skipping the ui.
+		 */
+		
+		frame.getTextArea().setText("Hello World!");		//precondition text area
+		testFile = new File("FakeTTSApiOut.txt");			//precondition output file
+		doc.saveSettings(50,21,11,"ROT13","FAKETTS");     	//precondition settings (api is set last bedore other settings
+															//and needs to be set in order for fakeTTS to print the settings)
+		if(testFile.exists()){								//clear output file (1st time)
+			testFile.delete();
+			try {
+				testFile.createNewFile();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+		
+		doc.saveSettings(100,42,69,"ROT13","FAKETTS");		
+		try {
+			Scanner fileScanner = new Scanner(testFile);
+			assertEquals("Settings in TTS output file should be the same as set.", 
+					fileScanner.nextLine(), "100 69 42");   //arg rate comes before pitch in the doc.saveSettings method
+			fileScanner.close();
+		}catch(FileNotFoundException e) {
+			e.printStackTrace();
+		}
+		
+		/**Test case 8
+		 * test changing encoding setting (US12)
+		 */
+		testFile.delete();									//clear output file
+		try {
+			testFile.createNewFile();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		doc.saveSettings(50,21,11,"ATBASH","FAKETTS");	
+		testCommand = testCommandFactory.getCommand("PlayAllEncoded");
+		testCommand.actionPerformed(null);
+		try {
+			Scanner fileScanner = new Scanner(testFile);
+			assertEquals("Text in TTS output file should be the encoded (ATBASH)  of text area.", 
+					fileScanner.nextLine(), "Svool Dliow!");
+			fileScanner.close();
+		}
+		catch(FileNotFoundException e) {
+			e.printStackTrace();
+		}
 	}
-	
-	@Test
-	public void testReplayCommands() {	/*
-		Launcher.main(null);
-		frame = Launcher.frame;
-		
-		ActionListener[] commands = new ActionListener[5];
-		commands[0] = testCommandFactory.getCommand("NewFileCommand");
-		frame.getTextArea().setText("Hello world replay!");
-		frame.getFileChooser().setSelectedFile(testFile);
-		commands[1] = testCommandFactory.getCommand("SaveFileCommand");
-		commands[2] = testCommandFactory.getCommand("OpenFileCommand");
-		commands[3] = testCommandFactory.getCommand("PlayAllCommand");
-		commands[3] = testCommandFactory.getCommand("PlayAllCommand");
-		frame.setVolumeValue(100);
-	*/}
+
 }
