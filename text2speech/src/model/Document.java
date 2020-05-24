@@ -253,6 +253,12 @@ public class Document {
 		
 	}
 	
+	/**
+	 * This method is called when the recording.
+	 * 
+	 * @param frame
+	 * @param filePath
+	 */
 	public void openFilePath(FreeTTSWindow frame, String filePath) {
 		FileReader fileReader = null;
 		try {
@@ -266,7 +272,7 @@ public class Document {
 	}
 	
 	/**
-	 * This method is called when the recording is 
+	 * This method is called when the recording.
 	 * 
 	 * @param frame The application's main frame.
 	 * @param filePath The path to save the file.
@@ -274,6 +280,9 @@ public class Document {
 	public void saveFilePath(FreeTTSWindow frame, String filePath) {
 		FileWriter fw = null;
 		try {
+			if (!filePath.toLowerCase().endsWith(".txt")) {
+				filePath = filePath + ".txt";
+			}
 			fw = new FileWriter(filePath);
 			frame.getTextArea().write(fw);
 			fw.close();
