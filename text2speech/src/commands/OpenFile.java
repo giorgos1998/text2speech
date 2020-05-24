@@ -14,24 +14,38 @@ public class OpenFile extends Command{
 	
 	private FreeTTSWindow frame;
 	private Document doc;
+	private CommandManager manager;
+	private boolean cloneFlag = false;
+	private String openFilePath;
 	
-	public OpenFile(FreeTTSWindow frame, Document doc) {
+	public OpenFile(FreeTTSWindow frame, Document doc, CommandManager manager) {
 		this.frame = frame;
 		this.doc = doc;
+		this.manager = manager;
 	}
 		
 	@Override
 	public void actionPerformed(ActionEvent ev) {
-		execute();
+		if (manager.isRecording()) {
+			execute();
+			manager.addClone("OpenFileCommand");
+		} else {
+			execute();
+		}
 	}
 
 	@Override
-	public void execute() {
-		doc.openFile(frame);
+	public void execute() {		
+		if (cloneFlag == true) {
+			doc.openFilePath(frame, openFilePath);
+		}else {			
+			doc.openFile(frame);
+			openFilePath = doc.getOpenFilePath();
+		}
 	}
 	
 	@Override
 	public void setCloneFlag(boolean value) {
-		//do nothing, cannot be cloned
+		cloneFlag = value;
 	}
 }

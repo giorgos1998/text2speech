@@ -29,10 +29,10 @@ public class CommandManager {
 	
 	public void loadCache(FreeTTSWindow frame, Document doc) {
 		//TODO add all commands
-		commandCache.put("NewFileCommand", new NewFile(frame, doc));
-		commandCache.put("OpenFileCommand", new OpenFile(frame, doc));
-		commandCache.put("SaveFileCommand", new SaveFile(frame, doc));
-		commandCache.put("SaveAsFileCommand", new SaveAsFile(frame, doc));
+		commandCache.put("NewFileCommand", new NewFile(frame, doc, this));
+		commandCache.put("OpenFileCommand", new OpenFile(frame, doc, this));
+		commandCache.put("SaveFileCommand", new SaveFile(frame, doc, this));
+		commandCache.put("SaveAsFileCommand", new SaveAsFile(frame, doc, this));
 		commandCache.put("ExitCommand", new Exit());
 		commandCache.put("TuneAudioCommand", new TuneAudio(frame, doc, this));
 		commandCache.put("HelpCommand", new Help());
@@ -40,7 +40,7 @@ public class CommandManager {
 		commandCache.put("PlaySelectedCommand", new PlaySelected(frame, doc, this));
 		commandCache.put("PlayAllReverse", new PlayAllReverse(frame, doc, this));
 		commandCache.put("PlaySelectedReverse", new PlaySelectedReverse(frame, doc, this));
-		commandCache.put("PlayAllEncoded", new PlayAllEncoded(frame, doc,this));
+		commandCache.put("PlayAllEncoded", new PlayAllEncoded(frame, doc, this));
 		commandCache.put("PlaySelectedEncoded", new PlaySelectedEncoded(frame, doc, this));
 		commandCache.put("StartRecording", new StartRecording(this));
 		commandCache.put("StopRecording", new StopRecording(this));

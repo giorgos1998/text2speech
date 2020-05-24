@@ -46,6 +46,9 @@ public class Document {
 	//maybe more
 	private boolean flag; //This variable is true when saveFile()/saveFileAs() calls newFile()
 	
+	private String openFilePath = null;
+	private String saveFilePath = null;
+	
 	public Document() {
 		speechFactory = new TextToSpeechApiFactory();
 		speechAPI = speechFactory.createSpeechApi("FREETTS"); //default value
@@ -189,6 +192,7 @@ public class Document {
 		
 		if (frame.getFileChooser().showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
 			String fileName = frame.getFileChooser().getSelectedFile().getAbsolutePath();
+			openFilePath = fileName;
 			FileReader fileReader = null;
 			try {
 				fileReader = new FileReader(fileName);
@@ -233,6 +237,7 @@ public class Document {
 		}else{	
 			try {
 				filePath = frame.getFileChooser().getSelectedFile().getPath();
+				saveFilePath = filePath;
 				if (!filePath.toLowerCase().endsWith(".txt")) {
 					filePath = filePath + ".txt";
 				}
@@ -246,6 +251,36 @@ public class Document {
 			}
 		}
 		
+	}
+	
+	public void openFilePath(FreeTTSWindow frame, String filePath) {
+		FileReader fileReader = null;
+		try {
+			fileReader = new FileReader(filePath);
+			frame.getTextArea().read(fileReader, null);
+			fileReader.close();
+			frame.setTitle(filePath + "   -   FreeTTS Editor");
+		}catch(IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	/**
+	 * This method is called when the recording is 
+	 * 
+	 * @param frame The application's main frame.
+	 * @param filePath The path to save the file.
+	 */
+	public void saveFilePath(FreeTTSWindow frame, String filePath) {
+		FileWriter fw = null;
+		try {
+			fw = new FileWriter(filePath);
+			frame.getTextArea().write(fw);
+			fw.close();
+			frame.setTitle(filePath + "   -   FreeTTS Editor");	
+		}catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	/**
@@ -264,6 +299,7 @@ public class Document {
 		if (frame.getFileChooser().showSaveDialog(null) == JFileChooser.APPROVE_OPTION) {
 			try {
 				filePath = frame.getFileChooser().getSelectedFile().getPath();
+				saveFilePath = filePath;
 				if (!filePath.endsWith(".txt")) {
 					filePath = filePath + ".txt";
 				}
@@ -413,5 +449,29 @@ public class Document {
 		speechAPI.setPich(pitch);
 		encoder = encoderFactory.createStrategy(strategy);
 		speechAPI = speechFactory.createSpeechApi(library);
+	}
+	
+	public String getOpenFilePath() {
+		return openFilePath;
+	}
+	
+	public String getSaveFilePath() {
+		return saveFilePath;
+	}
+		
+	public String getAuthor() {
+		return fileAuthor;
+	}
+	
+	public String getTitle() {
+		return fileTitle;
+	}
+	
+	public LocalDateTime getLastSaveDate() {
+		return lastSaveDate;
+	}
+	
+	public LocalDateTime getCreationDate() {
+		return creationDate;
 	}
 }

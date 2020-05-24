@@ -30,7 +30,11 @@ public class ReplayStack {
 	 */
 	public void playCommands() {
 		for(Command cmd:stack) {
-			cmd.execute();
+			try {
+				cmd.execute();
+			}catch(Exception e) {
+				continue;
+			}
 		}
 		stack.clear();
 	}

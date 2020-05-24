@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.SystemColor;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.time.LocalDateTime;
 
 import javax.swing.*;
 import javax.swing.GroupLayout.Alignment;
@@ -62,6 +63,9 @@ public class FreeTTSWindow extends JFrame{
 	private JSlider pitchSlider;
 	private JComboBox<String> strategyBox;
 	private JComboBox<String> libraryBox;
+	
+	//Info menu
+	private JFrame infoFrame;
 
 	/**
 	 * Creates the main frame and sets its title,
@@ -174,6 +178,15 @@ public class FreeTTSWindow extends JFrame{
 			}
 		});
 		menuBar.add(countLines);
+		
+		JButton infoButton = new JButton("File Info");
+		infoButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent ev) {
+				//TODO
+				//openInfoWindow();
+			}
+		});
+		menuBar.add(infoButton);
 	}
 	
 	/** 
@@ -299,6 +312,51 @@ public class FreeTTSWindow extends JFrame{
 				.addComponent(applyButton)).addGap(29))
 		);
 		preferencesFrame.getContentPane().setLayout(groupLayout);
+	}
+	
+	/**
+	 * A frame that contains all the information of the file: title, author, creation date and last save date
+	 * 
+	 * @param author
+	 * @param title
+	 * @param creationDate
+	 * @param lastSaveDate
+	 */
+	public void openInfoWindow(String author, String title, LocalDateTime creationDate, LocalDateTime lastSaveDate) {
+		infoFrame = new JFrame();
+		infoFrame.setTitle("File Info");
+		infoFrame.setBounds(300, 250, 350, 300);
+		infoFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		infoFrame.setResizable(false);
+		infoFrame.setVisible(true);;
+		
+		JLabel titleLabel = new JLabel("Title:");
+		JLabel authorLabel = new JLabel("Author:");	
+		JLabel creationDateLabel = new JLabel("Creation Date:");
+		JLabel lastSaveDateLabel = new JLabel("Last Save Date:");
+		
+		JButton cancelButton = new JButton("Cancel");
+		cancelButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent ev) {
+				infoFrame.dispose();
+			}
+		});
+		
+		GroupLayout groupLayout = new GroupLayout(infoFrame.getContentPane());
+		groupLayout.setHorizontalGroup(
+			groupLayout.createParallelGroup(Alignment.LEADING)
+				.addGroup(groupLayout.createSequentialGroup().addGap(46).addGroup(groupLayout.createParallelGroup(Alignment.LEADING, false)
+				.addComponent(creationDateLabel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+				.addComponent(authorLabel, GroupLayout.DEFAULT_SIZE, 74, Short.MAX_VALUE).addComponent(lastSaveDateLabel)
+				.addComponent(titleLabel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+				.addContainerGap(316, Short.MAX_VALUE)).addGroup(Alignment.TRAILING, groupLayout.createSequentialGroup()
+				.addContainerGap(300, Short.MAX_VALUE).addComponent(cancelButton).addGap(51)));
+		groupLayout.setVerticalGroup(
+			groupLayout.createParallelGroup(Alignment.LEADING)
+				.addGroup(groupLayout.createSequentialGroup().addGap(49).addComponent(titleLabel).addGap(27)
+				.addComponent(authorLabel).addGap(31).addComponent(creationDateLabel).addGap(29).addComponent(lastSaveDateLabel)
+				.addGap(18).addComponent(cancelButton).addContainerGap(36, Short.MAX_VALUE)));
+		infoFrame.getContentPane().setLayout(groupLayout);
 	}
 	
 	/**
