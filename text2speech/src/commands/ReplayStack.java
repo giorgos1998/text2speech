@@ -43,4 +43,8 @@ public class ReplayStack {
 		return stack.isEmpty();
 	}
 	
+	public ArrayList<Command> getStack() {		//for testing
+		return stack;
+	}
+	
 }

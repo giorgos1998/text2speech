@@ -13,16 +13,18 @@ package tests;
  * is sure to return the selected text correctly and then it's played in the TTS like the playAll
  * commands
  * 
- * US13 is not tested since the replay command feature is not fully implemented.
- * 
  * I used file output from FakeTTS in order to test playing text and settings because checking
  * those would require tweaking the document to either somehow gain access to the FakeTTS object
  * or the doc's private fields.
+ * 
+ * For all the windows that open you can ignore them, !!! except for the two select file dialogues
+ * those block the test so you need to click "cancel" to continue.
  */
 
 
 import static org.junit.Assert.*;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 import java.util.Scanner;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -32,6 +34,7 @@ import org.junit.Test;
 
 import main.Launcher;
 import model.Document;
+import commands.Command;
 import commands.CommandManager;
 import gui.FreeTTSWindow;
 
@@ -204,8 +207,7 @@ public class TestClass {
 		
 		frame.getTextArea().setText("Hello World!");		//precondition text area
 		testFile = new File("FakeTTSApiOut.txt");			//precondition output file
-		doc.saveSettings(50,21,11,"ROT13","FAKETTS");     	//precondition settings (api is set last bedore other settings
-															//and needs to be set in order for fakeTTS to print the settings)
+
 		if(testFile.exists()){								//clear output file (1st time)
 			testFile.delete();
 			try {
@@ -247,5 +249,59 @@ public class TestClass {
 			e.printStackTrace();
 		}
 	}
+	
+	@Test
+	public void testReplay() {
+		Launcher.main(null);
+		frame = Launcher.frame;
+		doc = Launcher.doc;
+		testCommandFactory = Launcher.manager;
+		
+		/**Test case 9
+		 * test replaying commands (US13)
+		 * I will record some commands and then check the stack to
+		 * see if the commands were recorded. Testing from the command
+		 * results is impossible since I can't assert anything inbetween 
+		 * the commands being replayed -I can only assert the results of
+		 * the last one.
+		 */
+		testCommandFactory.startRecording();
+		testCommand = testCommandFactory.getCommand("OpenFileCommand");
+		testCommand.actionPerformed(null);
+		testCommand = testCommandFactory.getCommand("SaveFileCommand");
+		testCommand.actionPerformed(null);
+		testCommand = testCommandFactory.getCommand("SaveAsFileCommand");
+		testCommand.actionPerformed(null);
+		testCommand = testCommandFactory.getCommand("PlayAllCommand");
+		testCommand.actionPerformed(null);
+		testCommand = testCommandFactory.getCommand("PlaySelectedCommand");
+		testCommand.actionPerformed(null);
+		testCommand = testCommandFactory.getCommand("PlayAllReverse");
+		testCommand.actionPerformed(null);
+		testCommand = testCommandFactory.getCommand("PlaySelectedReverse");
+		testCommand.actionPerformed(null);
+		testCommand = testCommandFactory.getCommand("PlayAllEncoded");
+		testCommand.actionPerformed(null);
+		testCommand = testCommandFactory.getCommand("PlaySelectedEncoded");
+		testCommand.actionPerformed(null);
+		//testCommand = testCommandFactory.getCommand("TuneAudioCommand");	//this crashes in testing because  
+		//testCommand.actionPerformed(null);								//the preferences window is not open
+		testCommandFactory.stopRecording();
+		
+		ArrayList<Command> recording = testCommandFactory.getStack();
+		String [] expectedRecording = new String[] {"commands.OpenFile",
+													"commands.SaveFile",
+													"commands.SaveAsFile",
+													"commands.PlayAll",
+													"commands.PlaySelected",
+													"commands.PlayAllReverse",
+													"commands.PlaySelectedReverse",
+													"commands.PlayAllEncoded",
+													"commands.PlaySelectedEncoded"};
 
+		for(int i = 0;i<recording.size();i++) {
+			assertEquals("The class name should be the recorded class name.",
+					recording.get(i).getClass().getName(),expectedRecording[i]);
+		}
+	}
 }

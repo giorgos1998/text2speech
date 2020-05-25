@@ -1,5 +1,6 @@
 package commands;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import gui.FreeTTSWindow;
@@ -58,5 +59,9 @@ public class CommandManager {
 	
 	public boolean isRecording() {
 		return record;
+	}
+	
+	public ArrayList<Command> getStack() {		//for testing
+		return stack.getStack();
 	}
 }
