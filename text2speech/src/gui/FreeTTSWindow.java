@@ -58,6 +58,11 @@ public class FreeTTSWindow extends JFrame{
 	
 	private CommandManager manager;
 	
+	//New file menu
+	private JFrame newFileFrame;	
+	private JTextField titleTextField;
+	private JTextField authorTextField;
+	
 	//Preferences menu
 	private JFrame preferencesFrame;
 	private JSlider volumeSlider;
@@ -194,7 +199,11 @@ public class FreeTTSWindow extends JFrame{
 	 */		
 	public void createListeners(CommandManager manager) {
 		this.manager = manager;
-		newMenuItem.addActionListener(manager.getCommand("NewFileCommand"));
+		newMenuItem.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent ev) {
+				openNewFileWindow();
+			}
+		});
 		openMenuItem.addActionListener(manager.getCommand("OpenFileCommand"));
 		saveMenuItem.addActionListener(manager.getCommand("SaveFileCommand"));
 		saveAsMenuItem.addActionListener(manager.getCommand("SaveAsFileCommand"));
@@ -316,7 +325,65 @@ public class FreeTTSWindow extends JFrame{
 	}
 	
 	/**
-	 * A frame that contains all the information of the file: title, author, creation date and last save date
+	 * Pop's up a window that requests the user to give the file a title and an author.
+	 * You can press "Create" button to create the new file or "Cancel" button.
+	 */
+	public void openNewFileWindow() {
+		newFileFrame = new JFrame();
+		newFileFrame.setTitle("New File");
+		newFileFrame.setBounds(400, 200, 482, 245);
+		newFileFrame.setResizable(false);
+		newFileFrame.setVisible(true);
+		
+		JLabel titleLabel = new JLabel("Title");
+		JLabel authorLabel = new JLabel("Author");
+		
+		titleTextField = new JTextField();
+		titleTextField.setColumns(10);
+		
+		authorTextField = new JTextField();
+		authorTextField.setColumns(10);
+				
+		JButton createButton = new JButton("Create");
+		createButton.addActionListener(manager.getCommand("NewFileCommand"));
+		
+		JButton cancelButton = new JButton("Cancel");
+		cancelButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent ev) {
+				newFileFrame.dispose();
+			}
+		});
+		
+		GroupLayout groupLayout = new GroupLayout(newFileFrame.getContentPane());
+		groupLayout.setHorizontalGroup(
+			groupLayout.createParallelGroup(Alignment.LEADING).addGroup(groupLayout.createSequentialGroup()
+					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+					.addGroup(Alignment.TRAILING, groupLayout.createSequentialGroup()
+					.addContainerGap().addComponent(createButton).addGap(31).addComponent(cancelButton)
+					.addGap(28)).addGroup(groupLayout.createSequentialGroup().addGap(75)
+					.addGroup(groupLayout.createParallelGroup(Alignment.TRAILING, false)
+					.addComponent(authorLabel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+					.addComponent(titleLabel, GroupLayout.DEFAULT_SIZE, 35, Short.MAX_VALUE))
+					.addGap(27).addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+					.addComponent(titleTextField, GroupLayout.PREFERRED_SIZE, 217, GroupLayout.PREFERRED_SIZE)
+					.addComponent(authorTextField, 217, 217, 217)))).addContainerGap(114, Short.MAX_VALUE))
+		);
+		groupLayout.setVerticalGroup(
+			groupLayout.createParallelGroup(Alignment.LEADING).addGroup(groupLayout.createSequentialGroup()
+					.addGap(41).addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
+					.addComponent(titleLabel, GroupLayout.PREFERRED_SIZE, 32, GroupLayout.PREFERRED_SIZE)
+					.addComponent(titleTextField, GroupLayout.PREFERRED_SIZE, 26, GroupLayout.PREFERRED_SIZE))
+					.addGap(26).addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
+					.addComponent(authorTextField, GroupLayout.PREFERRED_SIZE, 26, GroupLayout.PREFERRED_SIZE)
+					.addComponent(authorLabel, GroupLayout.PREFERRED_SIZE, 32, GroupLayout.PREFERRED_SIZE))
+					.addGap(26).addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
+					.addComponent(createButton).addComponent(cancelButton)).addContainerGap())
+		);
+		newFileFrame.getContentPane().setLayout(groupLayout);			
+	}
+	
+	/**
+	 * A frame that contains all the information of the file: title, author, creation date and last save date.
 	 * 
 	 * @param author
 	 * @param title
@@ -463,4 +530,17 @@ public class FreeTTSWindow extends JFrame{
 		preferencesFrame.dispose();
 	}
 	
+	public void closeNewFileWindow() {
+		newFileFrame.dispose();
+	}
+	
+	public String getAuthorTextField() {
+		//return authorTextField;
+		return authorTextField.getText().trim();
+	}
+	
+	public String getTitleTextField() {
+		//return titleTextField;
+		return titleTextField.getText().trim();
+	}
 }
