@@ -4,6 +4,11 @@ import java.awt.event.ActionEvent;
 import gui.FreeTTSWindow;
 import model.Document;
 
+/**
+ * <h1> Play Selected Command </h1> 
+ * @author Georgios Papadatos
+ */
+
 public class PlaySelected extends Command{
 	
 	private FreeTTSWindow frame;

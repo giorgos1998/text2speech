@@ -6,6 +6,11 @@ import java.util.HashMap;
 import gui.FreeTTSWindow;
 import model.Document;
 
+/**
+ * <h1> Command Manager </h1> 
+ * @author Georgios Papadatos
+ */
+
 public class CommandManager {
 
 	private HashMap<String, Command> commandCache;
@@ -29,7 +34,6 @@ public class CommandManager {
 	}
 	
 	public void loadCache(FreeTTSWindow frame, Document doc) {
-		//TODO add all commands
 		commandCache.put("NewFileCommand", new NewFile(frame, doc, this));
 		commandCache.put("OpenFileCommand", new OpenFile(frame, doc, this));
 		commandCache.put("SaveFileCommand", new SaveFile(frame, doc, this));

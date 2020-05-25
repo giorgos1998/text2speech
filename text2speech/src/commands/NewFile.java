@@ -12,6 +12,7 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 /**
  * <h1> New File Command </h1> 
  * @author Vasiliki Kanakari
+ * @author Georgios Papadatos
  */
 
 public class NewFile extends Command{

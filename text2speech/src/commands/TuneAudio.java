@@ -50,7 +50,7 @@ public class TuneAudio extends Command{
 
 	@Override
 	public void execute() {
-		if (cloneFlag == false) {
+		if (cloneFlag == false) { 				//if it isn't a clone
 			volumeValue = frame.getVolumeValue();
 			speedValue = frame.getSpeedValue();
 			pitchValue = frame.getPitchValue();
@@ -64,7 +64,6 @@ public class TuneAudio extends Command{
 		frame.setSpeechLibrary(speechLibrary);
 		frame.closePreferencesWindow();
 		
-		//TODO Add model.Document.saveSettings()
 		doc.saveSettings(volumeValue, speedValue, pitchValue, encodingStrategy, speechLibrary);
 	}
 

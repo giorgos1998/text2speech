@@ -2,6 +2,11 @@ package commands;
 
 import java.awt.event.ActionListener;
 
+/**
+ * <h1> Command </h1> 
+ * @author Georgios Papadatos
+ */
+
 public abstract class Command implements ActionListener, Cloneable{
 	
 	public abstract void execute();

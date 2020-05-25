@@ -4,6 +4,11 @@ import java.awt.event.ActionEvent;
 import gui.FreeTTSWindow;
 import model.Document;
 
+/**
+ * <h1> Play Selected Encoded Command </h1> 
+ * @author Georgios Papadatos
+ */
+
 public class PlaySelectedEncoded extends Command{
 
 	private FreeTTSWindow frame;
@@ -21,8 +26,7 @@ public class PlaySelectedEncoded extends Command{
 		if (manager.isRecording()) {
 			execute();
 			manager.addClone("PlaySelectedEncoded");
-		}
-		else {
+		} else {
 			execute();
 		}
 	}

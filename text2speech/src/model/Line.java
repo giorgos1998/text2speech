@@ -1,5 +1,10 @@
 package model;
 
+/**
+ * <h1> Line </h1> 
+ * @author Georgios Papadatos
+ */
+
 public class Line {
 
 	private String[] words;

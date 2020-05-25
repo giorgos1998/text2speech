@@ -5,6 +5,11 @@ import model.Document;
 
 import java.awt.event.ActionEvent;
 
+/**
+ * <h1> Play All Command </h1> 
+ * @author Georgios Papadatos
+ */
+
 public class PlayAll extends Command{
 
 	private FreeTTSWindow frame;
@@ -22,8 +27,7 @@ public class PlayAll extends Command{
 		if (manager.isRecording()) {
 			execute();
 			manager.addClone("PlayAllCommand");
-		}
-		else {
+		} else {
 			execute();
 		}
 	}

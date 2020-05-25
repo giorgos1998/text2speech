@@ -17,7 +17,6 @@ public class Help extends Command{
 
 	@Override
 	public void execute() {
-		//TODO modify the message
 		String message = "Here we provide guidelines, concering application's main functionalities.\n\n";
 		message += "  FILE\n" + "----------------------------------\n" +
 				"New file" + String.format("%10s", ":  ") + "Create a new document by giving it a title and an author.\n" + 

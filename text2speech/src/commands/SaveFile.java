@@ -11,6 +11,7 @@ import javax.swing.JOptionPane;
 /**
  * <h1> Save File Command </h1> 
  * @author Vasiliki Kanakari
+ * @author Georgios Papadatos
  */
 
 public class SaveFile extends Command{
@@ -48,7 +49,7 @@ public class SaveFile extends Command{
 				File selectedFile = frame.getFileChooser().getSelectedFile();
 				String textToSave = frame.getTextArea().getText();
 				if (selectedFile == null) {								//file is initialized, but it's the first time getting saved
-					//save new file
+					//Pop's up the SaveDialog window for the user to give the file a name, and saves it to a directory.
 					if (frame.getFileChooser().showSaveDialog(frame) == JFileChooser.APPROVE_OPTION) {
 						saveFilePath = frame.getFileChooser().getSelectedFile().getPath();
 						doc.saveFile(saveFilePath, textToSave, true);	//the file choice is considered a new file

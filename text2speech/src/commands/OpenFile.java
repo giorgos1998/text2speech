@@ -10,6 +10,7 @@ import javax.swing.JFileChooser;
 /**
  * <h1> Open File Command </h1> 
  * @author Vasiliki Kanakari
+ * @author Georgios Papadatos
  */
 
 public class OpenFile extends Command{
@@ -32,20 +33,20 @@ public class OpenFile extends Command{
 		if (manager.isRecording()) {
 			execute();
 			manager.addClone("OpenFileCommand");
-		}
-		else {
+		} else {
 			execute();
 		}
 	}
 
 	@Override
 	public void execute() {		
-		if (cloneFlag == true) {
+		if (cloneFlag == true) {						//if it's a clone
 			String textToPrint = doc.openFilePath(openFilePath);
 			frame.getTextArea().setText(textToPrint);
 			frame.setTitle(openFilePath + "   -   FreeTTS Editor");
 		}
-		else {
+		else {											//if it isn't a clone
+			//Pop's up the OpenDialog window for the user to choose which file they want to open.
 			if (frame.getFileChooser().showOpenDialog(frame) == JFileChooser.APPROVE_OPTION) {
 				String fileName = frame.getFileChooser().getSelectedFile().getAbsolutePath();
 				String textToPrint = doc.openFile(fileName);

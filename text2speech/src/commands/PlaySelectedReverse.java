@@ -26,8 +26,7 @@ public class PlaySelectedReverse extends Command{
 		if (manager.isRecording()) {
 			execute();
 			manager.addClone("PlaySelectedReverse");
-		}
-		else {
+		} else {
 			execute();
 		}
 	}

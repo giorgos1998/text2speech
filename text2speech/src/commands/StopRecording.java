@@ -4,6 +4,11 @@ import java.awt.event.ActionEvent;
 
 import javax.swing.JOptionPane;
 
+/**
+ * <h1> Stop Recording </h1> 
+ * @author Georgios Papadatos
+ */
+
 public class StopRecording extends Command{
 	
 	private CommandManager manager;

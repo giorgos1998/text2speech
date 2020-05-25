@@ -176,26 +176,13 @@ public class FreeTTSWindow extends JFrame{
 		menuBar.add(helpMenu);
 		
 		guidelines = new JMenuItem("Guidelines");
-		helpMenu.add(guidelines);
-				
-		/*
-		 * 	LINE TESTING STUFF
-		 * 
-		JButton countLines = new JButton("Count lines");
-		countLines.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent ev) {
-				int lines = textArea.getLineCount();
-				textArea.append("\n\nNo. of lines: " + lines);
-			}
-		});
-		menuBar.add(countLines);
-		*/
-		
+		helpMenu.add(guidelines);		
 	}
-	
-	/** 
-	 * Creates an action listener for each and every menu item
-	 */		
+		
+	/**
+	 * Creates an action listener for each and every menu item.	
+	 * @param manager
+	 */
 	public void createListeners(CommandManager manager) {
 		this.manager = manager;
 		newMenuItem.addActionListener(new ActionListener() {
@@ -523,22 +510,34 @@ public class FreeTTSWindow extends JFrame{
 		return String.valueOf(libraryBox.getSelectedItem());
 	}
 	
+	/**
+	 * Disposes the "Preferences" window.
+	 */
 	public void closePreferencesWindow() {
 		preferencesFrame.dispose();
 	}
 	
+	/**
+	 * Disposes the "New File" window.
+	 */
 	public void closeNewFileWindow() {
 		try {
 		newFileFrame.dispose();
 		} catch(Exception e) {}								//unreachable, for tests
 	}
 	
+	/**
+	 * @return String The author the user wrote into the text field.
+	 */
 	public String getAuthorTextField() {
 		//return authorTextField;
 		if(authorTextField==null) return "test author";		//unreachable, for tests
 		return authorTextField.getText().trim();
 	}
 	
+	/**
+	 * @return String The title the user wrote into the text field.
+	 */
 	public String getTitleTextField() {
 		//return titleTextField;
 		if(titleTextField==null) return "test title";		//unreachable, for tests

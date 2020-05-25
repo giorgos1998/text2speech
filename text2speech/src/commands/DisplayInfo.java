@@ -9,6 +9,12 @@ import javax.swing.JOptionPane;
 import gui.FreeTTSWindow;
 import model.Document;
 
+/**
+ * <h1> Display Info Command </h1> 
+ * Displays the properties of a document: title, author, creation date, last save date.
+ * @author Georgios Papadatos
+ */
+
 public class DisplayInfo extends Command{
 	
 	private FreeTTSWindow frame;
@@ -26,7 +32,6 @@ public class DisplayInfo extends Command{
 
 	@Override
 	public void execute() {
-		//TODO get info and send them at the frame
 		String author = doc.getAuthor();
 		String title = doc.getTitle();
 		LocalDateTime creationDate = doc.getCreationDate();

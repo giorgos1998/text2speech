@@ -4,6 +4,11 @@ import java.awt.event.ActionEvent;
 
 import javax.swing.JOptionPane;
 
+/**
+ * <h1> Start Recording </h1> 
+ * @author Georgios Papadatos
+ */
+
 public class StartRecording extends Command{
 	
 	private CommandManager manager;

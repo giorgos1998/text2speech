@@ -7,6 +7,11 @@ import java.awt.EventQueue;
 
 import commands.CommandManager;
 
+/**
+ * <h1> Launcher </h1> 
+ * The application's launcher.
+ * @author Georgios Papadatos
+ */
 
 public class Launcher{
 	

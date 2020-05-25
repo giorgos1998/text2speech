@@ -18,7 +18,6 @@ import model.textToSpeechAPI.TextToSpeechApiFactory;
  * @author Vasiliki Kanakari
  */
 
-
 public class Document {
 	
 	private ArrayList<Line> contents;
@@ -30,8 +29,7 @@ public class Document {
 	private String fileAuthor;
 	private String fileTitle;
 	private LocalDateTime creationDate;
-	private LocalDateTime lastSaveDate;
-	//private boolean flag; //This variable is true when saveFile()/saveFileAs() calls newFile()	
+	private LocalDateTime lastSaveDate;	
 	private String openFilePath = null;
 	private String saveFilePath = null;
 	private DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
@@ -46,24 +44,16 @@ public class Document {
 		fileTitle = null;
 		creationDate = null;
 		lastSaveDate = null;
-		//flag = false;
 	}
 	
 	/**
-	 * Requests the user to give the file a title and an author.
 	 * Does not continue when "Create" button is pressed, until user gives both title and author.
 	 * Sets the creation date and the last save date.
 	 * 
-	 * Initializes volume, speed, pitch, encoding strategy and speech library's values.
-	 * 
-	 * If this method has been called from saveFile() method, then flag = true
-	 * and after giving the file title and author, the file has to be saved, 
-	 * so it calls saveNewFile() method.
-	 * 
-	 * @param frame The application's main frame.
+	 * @param author The author the user gave to the document.
+	 * @param title  The title the user gave to the document.
 	 */
-	public String newFile(String author, String title) {
-			
+	public String newFile(String author, String title) {			
 		String message;
 
 		// Make sure user gave title and author
@@ -85,13 +75,12 @@ public class Document {
 	}
 	
 	/**
-	 * Pop's up the OpenDialog window for the user to choose which file they
-	 * want to open. After selecting a file, updates the text area so as the user can 
-	 * see its contents and sets the frame's title to the current open file's path.
+	 * Get's file's properties: author, title, creation date, last save date
+	 * Reads and returns file's contents.
+	 * Keeps the file path for replayability.
 	 * 
-	 * Initializes volume, speed, pitch and encoding strategy's values.
-	 * 
-	 * @param frame The application's main frame.
+	 * @param fileName The path of the file to be opened.
+	 * @return String Return the contents of the file or "error" in case of error.
 	 */
 	public String openFile(String fileName) { 
 		
@@ -116,20 +105,13 @@ public class Document {
 		}
 	
 	/**
-	 * Updates the file's content and the last saved date.
+	 * Updates the file's contents and the last saved date.
+	 * Keeps the file path for replayability.
 	 * 
-	 * If the file to be saved does not exist (has not been saved before)
-	 * and if the user has not given the file title and author yet, calls newFile() 
-	 * so as the user gives these values first and then save the file.
-	 * 
-	 * If the file to be saved does not exist (has not been saved before),
-	 * but the user has already given the file title and author, the
-	 * file can now be saved, so it calls saveNewFile() method.
-	 * 
-	 * @param frame The application's main frame.
+	 * @param filePath The path of the file to be saved.
+	 * @param textToSave The text of the file to be saved.
+	 * @param newFile
 	 */
-
-	
 	public void saveFile(String filePath, String textToSave, boolean newFile) {
 		try {
 			if (!filePath.toLowerCase().endsWith(".txt")) {
@@ -153,32 +135,9 @@ public class Document {
 	}
 	
 	/**
-	 * This method is called when "Save" menu item is chosen and the the file 
-	 * does not exist already or when "SaveAs" menu item is chosen.
-	 * It pop's up the save dialog window, user gives the file a name,
-	 * and saves it to a directory.
-	 * Then, sets the frame's title to the current file's path and
-	 * sets the creation date and the last save date of the file.
-	 * 
-	 * @param frame The application's main frame.
-	 */
-
-	
-	/**
-	 * If the user has not given the file title and author yet, calls newFile() 
-	 * so as the user gives these values first and then save the file.
-	 * 
-	 * If the user has already given the file title and author, the
-	 * file can now be saved, so it calls saveNewFile() method.
-	 * 
-	 * @param frame The application's main frame.
-	 */
-
-	/**
 	 * This method is called when recording.
-	 * 
-	 * @param frame
-	 * @param filePath
+	 * @param filePath The path of the file to be opened.
+	 * @return "error" if something goes wrong.
 	 */
 	public String openFilePath(String filePath) {
 		try {
@@ -205,11 +164,9 @@ public class Document {
 	
 	/**
 	 * This method is called when recording.
-	 * 
-	 * @param frame The application's main frame.
-	 * @param filePath The path to save the file.
+	 * @param title The title of the new file.
+	 * @param author The author of the new file.
 	 */
-	
 	public void newFileAuto(String title, String author) {
 		fileTitle = title;
 		fileAuthor = author;
@@ -218,10 +175,9 @@ public class Document {
 	}
 	
 	/**
-	 * TODO
 	 * 
-	 * @param
-	 * @return
+	 * @param text The text to be converted.
+	 * @return String The converted to a string contents.
 	 */
 	private String docContentsToString(String text) {
 		
@@ -315,7 +271,7 @@ public class Document {
 	}
 	
 	/**
-	 * TODO
+	 * Set's volume, speed, pitch, strategy, library to the file.
 	 * 
 	 * @param volume
 	 * @param speed
@@ -331,26 +287,44 @@ public class Document {
 		speechAPI.setPich(pitch);
 	}
 	
+	/**
+	 * @return String The path of the file to be opened.
+	 */
 	public String getOpenFilePath() {
 		return openFilePath;
 	}
 	
+	/**
+	 * @return String The path of the file to be saved.
+	 */
 	public String getSaveFilePath() {
 		return saveFilePath;
 	}
-		
+	
+	/**
+	 * @return String The file's author.
+	 */
 	public String getAuthor() {
 		return fileAuthor;
 	}
 	
+	/**
+	 * @return String The file's title.
+	 */
 	public String getTitle() {
 		return fileTitle;
 	}
 	
+	/**
+	 * @return String The date the file was created.
+	 */
 	public LocalDateTime getLastSaveDate() {
 		return lastSaveDate;
 	}
 	
+	/**
+	 * @return String The date the file was last saved.
+	 */
 	public LocalDateTime getCreationDate() {
 		return creationDate;
 	}
