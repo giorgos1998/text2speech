@@ -52,6 +52,7 @@ public class NewFile extends Command{
 			returnText = doc.newFile(localAuthor, localTitle);
 			if (returnText.equals("success")) {					//everything ok to initialize new file
 				frame.closeNewFileWindow();
+				frame.getTextArea().setText("");
 				FileFilter txtFilter = new FileNameExtensionFilter("Plain text", "txt");
 				frame.setFileChooser(new JFileChooser());
 				frame.getFileChooser().setFileFilter(txtFilter);
@@ -64,6 +65,7 @@ public class NewFile extends Command{
 			}
 		}else {													//if it's a clone
 			doc.newFileAuto(title, author);
+			frame.getTextArea().setText("");
 			FileFilter txtFilter = new FileNameExtensionFilter("Plain text", "txt");
 			frame.setFileChooser(new JFileChooser());
 			frame.getFileChooser().setFileFilter(txtFilter);
