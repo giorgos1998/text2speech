@@ -63,8 +63,6 @@ public class TestClass {
 		frame = Launcher.frame;
 		testCommandFactory = Launcher.manager;
 		
-		frame.getFileChooser().setSelectedFile(testFile);	//precondition output file
-		
 		/**Test case 1
 		 * test making new file (US1)
 		 * Unfortunately due to how newFile command is made user has to input title
@@ -79,6 +77,8 @@ public class TestClass {
 		
 		frame.getTextArea().setText("Hello World!");		//precondition text area
 		
+		frame.getFileChooser().setSelectedFile(testFile);	//precondition output file
+		
 		/**Test case 2
 		 * test saving in new file (US3)
 		 */
@@ -86,6 +86,7 @@ public class TestClass {
 		testCommand.actionPerformed(null);
 		try {
 			Scanner fileScanner = new Scanner(testFile);
+			for(int i=0; i<4; i++) fileScanner.nextLine(); //skip the first 4 lines to get to actual text
 			assertEquals("Text in file should be the same as text area.", 
 					"Hello World!", fileScanner.nextLine());
 			fileScanner.close();
@@ -295,7 +296,8 @@ public class TestClass {
 		testCommandFactory.stopRecording();
 		
 		ArrayList<Command> recording = testCommandFactory.getStack();
-		String [] expectedRecording = new String[] {"commands.OpenFile",
+		String [] expectedRecording = new String[] {"commands.NewFile",
+													"commands.OpenFile",
 													"commands.SaveFile",
 													"commands.SaveAsFile",
 													"commands.PlayAll",

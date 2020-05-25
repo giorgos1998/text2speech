@@ -528,16 +528,20 @@ public class FreeTTSWindow extends JFrame{
 	}
 	
 	public void closeNewFileWindow() {
+		try {
 		newFileFrame.dispose();
+		} catch(Exception e) {}
 	}
 	
 	public String getAuthorTextField() {
 		//return authorTextField;
+		if(authorTextField==null) return "test author";
 		return authorTextField.getText().trim();
 	}
 	
 	public String getTitleTextField() {
 		//return titleTextField;
+		if(titleTextField==null) return "test title";
 		return titleTextField.getText().trim();
 	}
 }
