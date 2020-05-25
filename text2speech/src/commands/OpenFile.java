@@ -20,7 +20,6 @@ public class OpenFile extends Command{
 	private boolean cloneFlag = false;
 	
 	private String openFilePath;
-	private boolean successfulLoad;
 	
 	public OpenFile(FreeTTSWindow frame, Document doc, CommandManager manager) {
 		this.frame = frame;
@@ -32,9 +31,7 @@ public class OpenFile extends Command{
 	public void actionPerformed(ActionEvent ev) {
 		if (manager.isRecording()) {
 			execute();
-			if (successfulLoad) {
-				manager.addClone("OpenFileCommand");
-			}
+			manager.addClone("OpenFileCommand");
 		}
 		else {
 			execute();
@@ -55,10 +52,6 @@ public class OpenFile extends Command{
 				frame.getTextArea().setText(textToPrint);
 				frame.setTitle(fileName + "   -   FreeTTS Editor");
 				openFilePath = doc.getOpenFilePath();
-				successfulLoad = true;
-			}
-			else {							//user chose cancel
-				successfulLoad = false;
 			}
 		}
 	}
