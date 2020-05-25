@@ -36,7 +36,6 @@ public class ReplayStack {
 				continue;
 			}
 		}
-		stack.clear();
 	}
 	
 	public boolean isEmpty() {

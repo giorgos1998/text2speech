@@ -51,6 +51,7 @@ public class CommandManager {
 	
 	public void startRecording() {
 		record = true;
+		stack.getStack().clear();
 	}
 	
 	public void stopRecording() {
