@@ -264,8 +264,14 @@ public class TestClass {
 		 * results is impossible since I can't assert anything inbetween 
 		 * the commands being replayed -I can only assert the results of
 		 * the last one.
+		 * 
+		 * Some commands are not tested because replaying does not apply to
+		 * them like: Exit, Help, StartRecording, etc.
+		 * 
 		 */
 		testCommandFactory.startRecording();
+		testCommand = testCommandFactory.getCommand("NewFileCommand");
+		testCommand.actionPerformed(null);
 		testCommand = testCommandFactory.getCommand("OpenFileCommand");
 		testCommand.actionPerformed(null);
 		testCommand = testCommandFactory.getCommand("SaveFileCommand");
