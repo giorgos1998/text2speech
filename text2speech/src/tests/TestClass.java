@@ -17,8 +17,7 @@ package tests;
  * those would require tweaking the document to either somehow gain access to the FakeTTS object
  * or the doc's private fields.
  * 
- * Three file dialogues are going to open, you have to cancel the first, select a valid file
- * in the second and ideally the same file for the third one.
+ * Four file dialogues are going to open, you have to cancel all of them for the tests to continue.
  */
 
 
