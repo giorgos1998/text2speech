@@ -1,10 +1,12 @@
 package model;
 
-import java.io.FileReader;
+import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Scanner;
 
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
@@ -38,6 +40,7 @@ public class Document {
 	private boolean flag; //This variable is true when saveFile()/saveFileAs() calls newFile()	
 	private String openFilePath = null;
 	private String saveFilePath = null;
+	private DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
 	
 	public Document() {
 		speechFactory = new TextToSpeechApiFactory();
@@ -66,13 +69,7 @@ public class Document {
 	 * @param frame The application's main frame.
 	 */
 	public void newFile(FreeTTSWindow frame) {
-		//initialize preferences window 
-		frame.setVolumeValue(50);
-		frame.setSpeedValue(21);
-		frame.setPitchValue(11);
-		frame.setEncodingStrategy("ROT13");
-		frame.setSpeechLibrary("FREETTS");
-				
+			
 		String message;
 		fileAuthor = frame.getAuthorTextField();
 		fileTitle = frame.getTitleTextField();
@@ -113,21 +110,23 @@ public class Document {
 	 * @param frame The application's main frame.
 	 */
 	public void openFile(FreeTTSWindow frame) { 
-		//initialize preferences window
-		frame.setVolumeValue(50);
-		frame.setSpeedValue(21);
-		frame.setPitchValue(11);
-		frame.setEncodingStrategy("ROT13");
-		frame.setSpeechLibrary("FREETTS");
 		
 		if (frame.getFileChooser().showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
 			String fileName = frame.getFileChooser().getSelectedFile().getAbsolutePath();
+			File file = new File(fileName);
 			openFilePath = fileName;
-			FileReader fileReader = null;
 			try {
-				fileReader = new FileReader(fileName);
-				frame.getTextArea().read(fileReader, null);
-				fileReader.close();
+				Scanner sc = new Scanner(file);
+				fileTitle = sc.nextLine();
+				fileAuthor = sc.nextLine();
+				creationDate = LocalDateTime.parse(sc.nextLine(), formatter);
+				lastSaveDate = LocalDateTime.parse(sc.nextLine(), formatter);
+				String text = "";
+				while (sc.hasNextLine()) {
+					text += sc.nextLine();
+				}
+				frame.getTextArea().setText(text);
+				sc.close();
 				frame.setTitle(fileName + "   -   FreeTTS Editor");
 			}catch(IOException e) {
 				e.printStackTrace();
@@ -172,10 +171,14 @@ public class Document {
 					filePath = filePath + ".txt";
 				}
 				fw = new FileWriter(filePath);
+				lastSaveDate = LocalDateTime.now();
+				fw.write(fileTitle + "\n");
+				fw.write(fileAuthor + "\n");
+				fw.write(creationDate.format(formatter) + "\n");
+				fw.write(lastSaveDate.format(formatter) + "\n");
 				frame.getTextArea().write(fw);
 				fw.close();
 				frame.setTitle(filePath + "   -   FreeTTS Editor");	
-				lastSaveDate = LocalDateTime.now();
 			}catch (IOException e) {
 				e.printStackTrace();
 			}
@@ -203,11 +206,15 @@ public class Document {
 				if (!filePath.endsWith(".txt")) {
 					filePath = filePath + ".txt";
 				}
-				fw = new FileWriter(filePath);
-				frame.getTextArea().write(fw);
-				fw.close();
 				creationDate = LocalDateTime.now();
 				lastSaveDate = creationDate;
+				fw = new FileWriter(filePath);
+				fw.write(fileTitle + "\n");
+				fw.write(fileAuthor + "\n");
+				fw.write(creationDate.format(formatter) + "\n");
+				fw.write(lastSaveDate.format(formatter) + "\n");
+				frame.getTextArea().write(fw);
+				fw.close();
 				frame.setTitle(filePath + "   -   FreeTTS Editor");
 			}catch (IOException e) {
 				e.printStackTrace();
@@ -244,14 +251,22 @@ public class Document {
 	 * @param filePath
 	 */
 	public void openFilePath(FreeTTSWindow frame, String filePath) {
-		FileReader fileReader = null;
 		try {
 			if (!filePath.toLowerCase().endsWith(".txt")) {
 				filePath = filePath + ".txt";
 			}
-			fileReader = new FileReader(filePath);
-			frame.getTextArea().read(fileReader, null);
-			fileReader.close();
+			File file = new File(filePath);
+			Scanner sc = new Scanner(file);
+			fileTitle = sc.nextLine();
+			fileAuthor = sc.nextLine();
+			creationDate = LocalDateTime.parse(sc.nextLine(), formatter);
+			lastSaveDate = LocalDateTime.parse(sc.nextLine(), formatter);
+			String text = "";
+			while (sc.hasNextLine()) {
+				text += sc.nextLine();
+			}
+			frame.getTextArea().setText(text);
+			sc.close();
 			frame.setTitle(filePath + "   -   FreeTTS Editor");
 		}catch(IOException e) {
 			e.printStackTrace();
@@ -271,10 +286,14 @@ public class Document {
 				filePath = filePath + ".txt";
 			}
 			fw = new FileWriter(filePath);
+			lastSaveDate = LocalDateTime.now();
+			fw.write(fileTitle + "\n");
+			fw.write(fileAuthor + "\n");
+			fw.write(creationDate.format(formatter) + "\n");
+			fw.write(lastSaveDate.format(formatter) + "\n");
 			frame.getTextArea().write(fw);
 			fw.close();
 			frame.setTitle(filePath + "   -   FreeTTS Editor");
-			lastSaveDate = LocalDateTime.now();
 		}catch (IOException e) {
 			e.printStackTrace();
 		}
