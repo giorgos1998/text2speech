@@ -4,9 +4,6 @@ import java.awt.BorderLayout;
 import java.awt.SystemColor;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-
 import javax.swing.*;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.LayoutStyle.ComponentPlacement;
@@ -390,7 +387,7 @@ public class FreeTTSWindow extends JFrame{
 	 * @param creationDate
 	 * @param lastSaveDate
 	 */
-	public void openInfoWindow(String author, String title, LocalDateTime creationDate, LocalDateTime lastSaveDate) {
+	public void openInfoWindow(String author, String title, String creationDate, String lastSaveDate) {
 		infoFrame = new JFrame();
 		infoFrame.setTitle("File Info");
 		infoFrame.setBounds(300, 250, 350, 300);
@@ -398,12 +395,10 @@ public class FreeTTSWindow extends JFrame{
 		infoFrame.setResizable(false);
 		infoFrame.setVisible(true);;
 		
-		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
-		
 		JLabel titleLabel = new JLabel("Title: " + title);
 		JLabel authorLabel = new JLabel("Author: " + author);	
-		JLabel creationDateLabel = new JLabel("Creation Date: " + creationDate.format(formatter));
-		JLabel lastSaveDateLabel = new JLabel("Last Save Date: " + lastSaveDate.format(formatter));
+		JLabel creationDateLabel = new JLabel("Creation Date: " + creationDate);
+		JLabel lastSaveDateLabel = new JLabel("Last Save Date: " + lastSaveDate);
 		
 		JButton cancelButton = new JButton("Close");
 		cancelButton.addActionListener(new ActionListener() {

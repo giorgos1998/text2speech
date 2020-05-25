@@ -4,7 +4,10 @@ import gui.FreeTTSWindow;
 import model.Document;
 
 import java.awt.event.ActionEvent;
-import java.time.LocalDateTime;
+import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
+import javax.swing.filechooser.FileFilter;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 /**
  * <h1> New File Command </h1> 
@@ -17,11 +20,10 @@ public class NewFile extends Command{
 	private Document doc;
 	private CommandManager manager;
 	private boolean cloneFlag = false;
+	
 	private String author;
 	private String title;
-	private LocalDateTime creationDate;
-	private LocalDateTime lastSaveDate;
-	private String openFilePath;
+	private String returnText;
 	
 	public NewFile(FreeTTSWindow frame, Document doc, CommandManager manager) {
 		this.frame = frame;
@@ -33,24 +35,40 @@ public class NewFile extends Command{
 	public void actionPerformed(ActionEvent ev) {
 		if (manager.isRecording()) {
 			execute();
-			manager.addClone("NewFileCommand");
-		} else {
+			if (returnText.equals("success")) {
+				manager.addClone("NewFileCommand");
+			}
+		}
+		else {
 			execute();
 		}
 	}
 
 	@Override
 	public void execute() {
-		if (cloneFlag == false) {
-			doc.newFile(frame);
-			author = doc.getAuthor();
-			title = doc.getTitle();
-			creationDate = doc.getCreationDate();
-			lastSaveDate = doc.getLastSaveDate();	
-			openFilePath = doc.getSaveFilePath();
-		}else {					
-			doc.openFilePath(frame, openFilePath);
-		}		
+		if (cloneFlag == false) {								//if it isn't a clone
+			String localAuthor = frame.getAuthorTextField();	//just in case user didn't input correct info
+			String localTitle = frame.getTitleTextField();
+			returnText = doc.newFile(localAuthor, localTitle);
+			if (returnText.equals("success")) {					//everything ok to initialize new file
+				frame.closeNewFileWindow();
+				FileFilter txtFilter = new FileNameExtensionFilter("Plain text", "txt");
+				frame.setFileChooser(new JFileChooser());
+				frame.getFileChooser().setFileFilter(txtFilter);
+				frame.setTitle("NewFile*   -   FreeTTS Editor");
+				author = localAuthor;							//save working info
+				title = localTitle;
+			}
+			else {												//some info missing to initialize new file
+				JOptionPane.showMessageDialog(null, returnText, "", JOptionPane.INFORMATION_MESSAGE);
+			}
+		}else {													//if it's a clone
+			doc.newFileAuto(title, author);
+			FileFilter txtFilter = new FileNameExtensionFilter("Plain text", "txt");
+			frame.setFileChooser(new JFileChooser());
+			frame.getFileChooser().setFileFilter(txtFilter);
+			frame.setTitle("NewFile*   -   FreeTTS Editor");
+		}
 	}
 	
 	@Override

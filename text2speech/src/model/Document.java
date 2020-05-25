@@ -8,12 +8,6 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-import javax.swing.JFileChooser;
-import javax.swing.JOptionPane;
-import javax.swing.filechooser.FileFilter;
-import javax.swing.filechooser.FileNameExtensionFilter;
-
-import gui.FreeTTSWindow;
 import model.encoding.EncStrategy;
 import model.encoding.EncStrategyFactory;
 import model.textToSpeechAPI.TextToSpeechApi;
@@ -37,7 +31,7 @@ public class Document {
 	private String fileTitle;
 	private LocalDateTime creationDate;
 	private LocalDateTime lastSaveDate;
-	private boolean flag; //This variable is true when saveFile()/saveFileAs() calls newFile()	
+	//private boolean flag; //This variable is true when saveFile()/saveFileAs() calls newFile()	
 	private String openFilePath = null;
 	private String saveFilePath = null;
 	private DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
@@ -52,7 +46,7 @@ public class Document {
 		fileTitle = null;
 		creationDate = null;
 		lastSaveDate = null;
-		flag = false;
+		//flag = false;
 	}
 	
 	/**
@@ -68,36 +62,26 @@ public class Document {
 	 * 
 	 * @param frame The application's main frame.
 	 */
-	public void newFile(FreeTTSWindow frame) {
+	public String newFile(String author, String title) {
 			
 		String message;
-		fileAuthor = frame.getAuthorTextField();
-		fileTitle = frame.getTitleTextField();
-		
+
 		// Make sure user gave title and author
-		if (fileAuthor.length() == 0 && fileTitle.length() == 0) {
+		if (author.length() == 0 && title.length() == 0) {
 			message = "You must give the file a Title and an Author!";
-		}else if (fileTitle.length() == 0) {
+		}else if (title.length() == 0) {
 			message = "You must give the file a Title!";
-		}else if (fileAuthor.length() == 0) {
+		}else if (author.length() == 0) {
 			message = "You must give the file an Author!";
-		// If user gave both title and author close newFileWindow
+		// If user gave both title and author return "success" to command
 		}else {
+			fileAuthor = author;
+			fileTitle = title;
 			creationDate = LocalDateTime.now();
-			lastSaveDate = creationDate;
-			FileFilter txtFilter = new FileNameExtensionFilter("Plain text", "txt");
-			frame.setFileChooser(new JFileChooser());
-			frame.getFileChooser().setFileFilter(txtFilter);
-			frame.setTitle("NewFile*   -   FreeTTS Editor");
-			if (flag == true) {
-				saveNewFile(frame);
-			}else {
-				frame.getTextArea().setText(null);
-			}
-			frame.closeNewFileWindow();
-			return;
+			lastSaveDate = null;
+			message = "success";
 		}
-		JOptionPane.showMessageDialog(null, message, "", JOptionPane.INFORMATION_MESSAGE);
+		return message;
 	}
 	
 	/**
@@ -109,10 +93,8 @@ public class Document {
 	 * 
 	 * @param frame The application's main frame.
 	 */
-	public void openFile(FreeTTSWindow frame) { 
+	public String openFile(String fileName) { 
 		
-		if (frame.getFileChooser().showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
-			String fileName = frame.getFileChooser().getSelectedFile().getAbsolutePath();
 			File file = new File(fileName);
 			openFilePath = fileName;
 			try {
@@ -125,14 +107,13 @@ public class Document {
 				while (sc.hasNextLine()) {
 					text += sc.nextLine();
 				}
-				frame.getTextArea().setText(text);
 				sc.close();
-				frame.setTitle(fileName + "   -   FreeTTS Editor");
+				return text;
 			}catch(IOException e) {
 				e.printStackTrace();
+				return "error";
 			}
 		}
-	}
 	
 	/**
 	 * Updates the file's content and the last saved date.
@@ -147,43 +128,28 @@ public class Document {
 	 * 
 	 * @param frame The application's main frame.
 	 */
-	public void saveFile(FreeTTSWindow frame) {
-		FileWriter fw = null;
-		String filePath;
-		// This file does not exist
-		if (frame.getFileChooser().getSelectedFile() == null) {
-			flag = true;		
-			if (fileTitle == null || fileAuthor == null) {
-				// Must create new file, to set values for fileTitle and fileAuthor
-				// and then save the file 
-				frame.openNewFileWindow(); //file is saved inside newFile(), since flag = true
-			}else {
-				// If user has given file title and author, the file can be saved
-				saveNewFile(frame);
+
+	
+	public void saveFile(String filePath, String textToSave, boolean newFile) {
+		try {
+			if (!filePath.toLowerCase().endsWith(".txt")) {
+				filePath = filePath + ".txt";
 			}
-		// This file already exists
-		// Change existing file's content
-		}else{	
-			try {
-				filePath = frame.getFileChooser().getSelectedFile().getPath();
-				saveFilePath = filePath;
-				if (!filePath.toLowerCase().endsWith(".txt")) {
-					filePath = filePath + ".txt";
-				}
-				fw = new FileWriter(filePath);
-				lastSaveDate = LocalDateTime.now();
-				fw.write(fileTitle + "\n");
-				fw.write(fileAuthor + "\n");
-				fw.write(creationDate.format(formatter) + "\n");
-				fw.write(lastSaveDate.format(formatter) + "\n");
-				frame.getTextArea().write(fw);
-				fw.close();
-				frame.setTitle(filePath + "   -   FreeTTS Editor");	
-			}catch (IOException e) {
-				e.printStackTrace();
+			saveFilePath = filePath;
+			FileWriter fw = new FileWriter(filePath);
+			lastSaveDate = LocalDateTime.now();
+			if (newFile) {
+				creationDate = lastSaveDate;
 			}
+			fw.write(fileTitle + "\n");
+			fw.write(fileAuthor + "\n");
+			fw.write(creationDate.format(formatter) + "\n");
+			fw.write(lastSaveDate.format(formatter) + "\n");
+			fw.write(textToSave);
+			fw.close();	
+		}catch (IOException e) {
+			e.printStackTrace();
 		}
-		
 	}
 	
 	/**
@@ -196,32 +162,7 @@ public class Document {
 	 * 
 	 * @param frame The application's main frame.
 	 */
-	private void saveNewFile(FreeTTSWindow frame) {
-		FileWriter fw = null;
-		String filePath;
-		if (frame.getFileChooser().showSaveDialog(null) == JFileChooser.APPROVE_OPTION) {
-			try {
-				filePath = frame.getFileChooser().getSelectedFile().getPath();
-				saveFilePath = filePath;
-				if (!filePath.endsWith(".txt")) {
-					filePath = filePath + ".txt";
-				}
-				creationDate = LocalDateTime.now();
-				lastSaveDate = creationDate;
-				fw = new FileWriter(filePath);
-				fw.write(fileTitle + "\n");
-				fw.write(fileAuthor + "\n");
-				fw.write(creationDate.format(formatter) + "\n");
-				fw.write(lastSaveDate.format(formatter) + "\n");
-				frame.getTextArea().write(fw);
-				fw.close();
-				frame.setTitle(filePath + "   -   FreeTTS Editor");
-			}catch (IOException e) {
-				e.printStackTrace();
-			};
-		}
-		flag = false;
-	}
+
 	
 	/**
 	 * If the user has not given the file title and author yet, calls newFile() 
@@ -232,25 +173,14 @@ public class Document {
 	 * 
 	 * @param frame The application's main frame.
 	 */
-	public void saveFileAs(FreeTTSWindow frame) {
-		flag = true;
-		if (fileTitle == null || fileAuthor == null) {
-			// Must create new file, to set values for fileTitle and fileAuthor
-			// and then save the file 
-			frame.openNewFileWindow(); //file is saved inside newFile(), since flag = true
-		}else {
-			// If user has given file title and author, the file can be saved
-			saveNewFile(frame);
-		}
-	}
-	
+
 	/**
 	 * This method is called when recording.
 	 * 
 	 * @param frame
 	 * @param filePath
 	 */
-	public void openFilePath(FreeTTSWindow frame, String filePath) {
+	public String openFilePath(String filePath) {
 		try {
 			if (!filePath.toLowerCase().endsWith(".txt")) {
 				filePath = filePath + ".txt";
@@ -265,11 +195,11 @@ public class Document {
 			while (sc.hasNextLine()) {
 				text += sc.nextLine();
 			}
-			frame.getTextArea().setText(text);
 			sc.close();
-			frame.setTitle(filePath + "   -   FreeTTS Editor");
+			return text;
 		}catch(IOException e) {
 			e.printStackTrace();
+			return "error";
 		}
 	}
 	
@@ -279,24 +209,12 @@ public class Document {
 	 * @param frame The application's main frame.
 	 * @param filePath The path to save the file.
 	 */
-	public void saveFilePath(FreeTTSWindow frame, String filePath) {
-		FileWriter fw = null;
-		try {
-			if (!filePath.toLowerCase().endsWith(".txt")) {
-				filePath = filePath + ".txt";
-			}
-			fw = new FileWriter(filePath);
-			lastSaveDate = LocalDateTime.now();
-			fw.write(fileTitle + "\n");
-			fw.write(fileAuthor + "\n");
-			fw.write(creationDate.format(formatter) + "\n");
-			fw.write(lastSaveDate.format(formatter) + "\n");
-			frame.getTextArea().write(fw);
-			fw.close();
-			frame.setTitle(filePath + "   -   FreeTTS Editor");
-		}catch (IOException e) {
-			e.printStackTrace();
-		}
+	
+	public void newFileAuto(String title, String author) {
+		fileTitle = title;
+		fileAuthor = author;
+		creationDate = LocalDateTime.now();
+		lastSaveDate = null;
 	}
 	
 	/**

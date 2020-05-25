@@ -2,6 +2,7 @@ package commands;
 
 import java.awt.event.ActionEvent;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 import javax.swing.JOptionPane;
 
@@ -30,11 +31,15 @@ public class DisplayInfo extends Command{
 		String title = doc.getTitle();
 		LocalDateTime creationDate = doc.getCreationDate();
 		LocalDateTime lastSaveDate = doc.getLastSaveDate();
-		if (author == null || title == null || creationDate == null || lastSaveDate == null) {
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
+		if (author == null || title == null || creationDate == null) {
 			JOptionPane.showMessageDialog(null, "Cannot view file info if you have not created a file!", "", JOptionPane.INFORMATION_MESSAGE);
 		}
+		else if(lastSaveDate == null){
+			frame.openInfoWindow(author, title, creationDate.format(formatter), "Not saved yet");
+		}
 		else {
-			frame.openInfoWindow(author, title, creationDate, lastSaveDate);
+			frame.openInfoWindow(author, title, creationDate.format(formatter), lastSaveDate.format(formatter));
 		}
 	}
 

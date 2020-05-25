@@ -4,7 +4,9 @@ import gui.FreeTTSWindow;
 import model.Document;
 
 import java.awt.event.ActionEvent;
-import java.time.LocalDateTime;
+
+import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
 
 /**
  * <h1> Save File As Command </h1> 
@@ -17,9 +19,9 @@ public class SaveAsFile extends Command{
 	private Document doc;
 	private CommandManager manager;
 	private boolean cloneFlag = false;
+	
 	private String saveFilePath;
-	private LocalDateTime lastSaveDate;
-	private LocalDateTime creationDate;
+	private boolean successfulSave;
 	
 	public SaveAsFile(FreeTTSWindow frame, Document doc, CommandManager manager) {
 		this.frame = frame;
@@ -31,7 +33,9 @@ public class SaveAsFile extends Command{
 	public void actionPerformed(ActionEvent e) {
 		if (manager.isRecording()) {
 			execute();
-			manager.addClone("SaveAsFileCommand");
+			if (successfulSave) {
+				manager.addClone("SaveFileCommand");
+			}
 		} else {
 			execute();
 		}
@@ -39,13 +43,28 @@ public class SaveAsFile extends Command{
 
 	@Override
 	public void execute() {
-		if (cloneFlag == false) {
-			doc.saveFileAs(frame);
-			saveFilePath = doc.getSaveFilePath();
-			lastSaveDate = doc.getLastSaveDate();
-			creationDate = doc.getCreationDate();
-		} else {			
-			doc.saveFilePath(frame, saveFilePath);
+		if (cloneFlag == false) {										//if it's not a clone
+			if (doc.getAuthor() == null || doc.getTitle() == null) {	//if file is not initialized
+				JOptionPane.showMessageDialog(frame, "You must initialize a file before saving! Please copy your content and create a new file.", "", JOptionPane.INFORMATION_MESSAGE);
+				successfulSave = false;
+			}
+			else {														//if file is initialized, it can be saved
+				String textToSave = frame.getTextArea().getText();
+				if (frame.getFileChooser().showSaveDialog(frame) == JFileChooser.APPROVE_OPTION) {
+					saveFilePath = frame.getFileChooser().getSelectedFile().getPath();
+					doc.saveFile(saveFilePath, textToSave, true);		//the file choice is considered a new file
+					frame.setTitle(saveFilePath + "   -   FreeTTS Editor");
+					successfulSave = true;
+				}
+				else {													//user chose cancel in save dialog
+					successfulSave = false;
+				}
+			}
+		}
+		else {															//if it's a clone
+			String textToSave = frame.getTextArea().getText();
+			doc.saveFile(saveFilePath, textToSave, true);				//using "Save As" and not "Save" means save as a new file
+			frame.setTitle(saveFilePath + "   -   FreeTTS Editor");
 		}		
 	}
 	
