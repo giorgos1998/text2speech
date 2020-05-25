@@ -35,9 +35,7 @@ public class NewFile extends Command{
 	public void actionPerformed(ActionEvent ev) {
 		if (manager.isRecording()) {
 			execute();
-			if (returnText.equals("success")) {
-				manager.addClone("NewFileCommand");
-			}
+			manager.addClone("NewFileCommand");
 		}
 		else {
 			execute();

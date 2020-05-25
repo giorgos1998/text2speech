@@ -21,7 +21,6 @@ public class SaveAsFile extends Command{
 	private boolean cloneFlag = false;
 	
 	private String saveFilePath;
-	private boolean successfulSave;
 	
 	public SaveAsFile(FreeTTSWindow frame, Document doc, CommandManager manager) {
 		this.frame = frame;
@@ -33,9 +32,7 @@ public class SaveAsFile extends Command{
 	public void actionPerformed(ActionEvent e) {
 		if (manager.isRecording()) {
 			execute();
-			if (successfulSave) {
-				manager.addClone("SaveFileCommand");
-			}
+			manager.addClone("SaveFileCommand");
 		} else {
 			execute();
 		}
@@ -46,7 +43,6 @@ public class SaveAsFile extends Command{
 		if (cloneFlag == false) {										//if it's not a clone
 			if (doc.getAuthor() == null || doc.getTitle() == null) {	//if file is not initialized
 				JOptionPane.showMessageDialog(frame, "You must initialize a file before saving! Please copy your content and create a new file.", "", JOptionPane.INFORMATION_MESSAGE);
-				successfulSave = false;
 			}
 			else {														//if file is initialized, it can be saved
 				String textToSave = frame.getTextArea().getText();
@@ -54,10 +50,6 @@ public class SaveAsFile extends Command{
 					saveFilePath = frame.getFileChooser().getSelectedFile().getPath();
 					doc.saveFile(saveFilePath, textToSave, true);		//the file choice is considered a new file
 					frame.setTitle(saveFilePath + "   -   FreeTTS Editor");
-					successfulSave = true;
-				}
-				else {													//user chose cancel in save dialog
-					successfulSave = false;
 				}
 			}
 		}
