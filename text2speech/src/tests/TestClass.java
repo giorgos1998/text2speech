@@ -17,8 +17,8 @@ package tests;
  * those would require tweaking the document to either somehow gain access to the FakeTTS object
  * or the doc's private fields.
  * 
- * For all the windows that open you can ignore them, !!! except for the two select file dialogues
- * those block the test so you need to click "cancel" to continue.
+ * Three file dialogues are going to open, you have to cancel the first, select a valid file
+ * in the second and ideally the same file for the third one.
  */
 
 
@@ -299,7 +299,7 @@ public class TestClass {
 		String [] expectedRecording = new String[] {"commands.NewFile",
 													"commands.OpenFile",
 													"commands.SaveFile",
-													"commands.SaveAsFile",
+													"commands.SaveFile",
 													"commands.PlayAll",
 													"commands.PlaySelected",
 													"commands.PlayAllReverse",
