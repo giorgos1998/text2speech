@@ -2,6 +2,7 @@ package gui;
 
 import java.awt.BorderLayout;
 import java.awt.SystemColor;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.*;
@@ -91,6 +92,7 @@ public class FreeTTSWindow extends JFrame{
         setTitle("FreeTTS Editor");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 682, 435);
+		setIconImage(Toolkit.getDefaultToolkit().getImage(FreeTTSWindow.class.getResource("/gui/image.png")));
 		
 		JMenuBar menuBar = new JMenuBar();
 		setJMenuBar(menuBar);
