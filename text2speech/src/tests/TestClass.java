@@ -62,6 +62,8 @@ public class TestClass {
 		frame = Launcher.frame;
 		testCommandFactory = Launcher.manager;
 		
+		frame.getTextArea().setText("Hello World!");		//precondition text area
+		
 		/**Test case 1
 		 * test making new file (US1)
 		 * Unfortunately due to how newFile command is made user has to input title
